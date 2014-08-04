@@ -16,9 +16,10 @@
    @author Konrad Jopek, Will Rogers
 '''
 
-import iso8601
 import datetime
 import re
+
+import isodate
 
 
 def valid_from(date, days=1):
@@ -51,8 +52,8 @@ def parse_timestamp(datetime_string):
     If timezone information is not present in the string, it
     assumes that the timezone is UTC.
     '''
-    dt = iso8601.parse_date(datetime_string)
-    utcdt = dt.astimezone(iso8601.iso8601.UTC)
+    dt = isodate.parse_datetime(datetime_string)
+    utcdt = dt.astimezone(isodate.UTC)
     # internal representation of datetimes is UTC without timezones
     return utcdt.replace(tzinfo=None)
 

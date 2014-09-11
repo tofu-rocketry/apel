@@ -26,7 +26,7 @@ class DateTimeUtilsTest(unittest.TestCase):
         with no timezone information for internal use.
         '''
 
-        valid_dates = [#'2010-01-01 10:01:02',  # isodate requires 'T' seperator
+        valid_dates = ['2010-01-01 10:01:02Z',
                        '2010-01-01T10:01:02Z',
                        '2010-01-01T11:01:02+01:00']
         dts = [parse_timestamp(date) for date in valid_dates]

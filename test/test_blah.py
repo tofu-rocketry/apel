@@ -62,7 +62,7 @@ class ParserBlahTest(unittest.TestCase):
                 +'"ceID=cream-2-fzk.gridka.de:8443/cream-pbs-atlasXL" ' 
                 +'"jobID=CREAM410741480" "lrmsID=9575064.lrms1" "localUser=11999"')
         # Should raise an exception - we have 'A' between date and time
-        self.assertRaises(ISO8601Error, self.parser.parse, line_invalidtimestamp)
+        self.assertRaises(ValueError, self.parser.parse, line_invalidtimestamp)
 
         
     def test_invalid_record_line(self):

@@ -54,6 +54,9 @@ def parse_timestamp(datetime_string):
     '''
     # isodate requires 'T' seperator
     dt = isodate.parse_datetime(datetime_string.replace(' ', 'T'))
+    if not dt.tzinfo:
+        # If no timezone set assume it's UTC anyway and return without timezone
+        return dt
     utcdt = dt.astimezone(isodate.UTC)
     # internal representation of datetimes is UTC without timezones
     return utcdt.replace(tzinfo=None)

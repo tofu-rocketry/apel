@@ -63,6 +63,7 @@ class ParserBlahTest(unittest.TestCase):
                 +'"jobID=CREAM410741480" "lrmsID=9575064.lrms1" "localUser=11999"')
         # Should raise an exception - we have 'A' between date and time
         self.assertRaises(ValueError, self.parser.parse, line_invalidtimestamp)
+        # isodate >= 0.5.1 raises ISO8601Error but it's a subclass of ValueError
 
         
     def test_invalid_record_line(self):

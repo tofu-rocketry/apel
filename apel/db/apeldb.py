@@ -61,14 +61,13 @@ class ApelDb(object):
         raise NotImplementedError("Database backend class should implement this"
                                   " method")
 
-    def load_records(self, record_list, replace=True, source=None):
+    def load_records(self, record_list, source):
         '''Given a list of records, and the DN of the sender,
         loads them into the database.'''
         raise NotImplementedError("Database backend class should implement this"
                                   " method")
 
-    def get_records(self, record_type, table_name=None, query=None,
-                    rec_number=1000):
+    def get_records(self, record_type, table_name, query, rec_number):
         '''
         Returns records from database with given record type.
         Query object specifies which rows from database should be loaded.

@@ -3,10 +3,6 @@ python:
   - "2.6"
   - "2.7"
   - "nightly"
-matrix:
-  allow_failures:
-    - python: "nightly"
-  fast_finish: true
 
 # MySQL doesn't start automatically in newer build environments
 services:

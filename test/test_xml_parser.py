@@ -39,7 +39,7 @@ class XMLParserTest(unittest.TestCase):
 
     def test_get_tag_by_attr(self):
         attributes = self.parser.doc.getElementsByTagNameNS(self.parser.NAMESPACE, 'attribute')
-        #print len(attributes)
+        #print(len(attributes))
         self.assertEqual(len(self.parser.getTagByAttr(attributes, 'id', 'test1')), 1)
         self.assertEqual(len(self.parser.getTagByAttr(attributes, 'id', 'test2')), 1)
 

@@ -59,8 +59,8 @@ def runprocess(db_config_file, config_file, log_config_file):
         db_password = dbcp.get('db', 'password')
 
     except (ConfigParser.Error, ValueError, IOError) as err:
-        print 'Error in configuration file %s: %s' % (config_file, str(err))
-        print 'The system will exit.'
+        print('Error in configuration file %s: %s' % (config_file, err))
+        print('The system will exit.')
         sys.exit(1)
 
     try:
@@ -78,8 +78,8 @@ def runprocess(db_config_file, config_file, log_config_file):
                            cp.getboolean('logging', 'console'))
         log = logging.getLogger('summariser')
     except (ConfigParser.Error, ValueError, IOError) as err:
-        print 'Error configuring logging: %s' % str(err)
-        print 'The system will exit.'
+        print('Error configuring logging: %s' % err)
+        print('The system will exit.')
         sys.exit(1)
 
     log.info('Starting apel summariser version %s.%s.%s', *__version__)
@@ -91,7 +91,7 @@ def runprocess(db_config_file, config_file, log_config_file):
             log.warning("Check that the summariser is not running, then remove the file.")
             raise Exception("The summariser cannot start while pidfile exists.")
     except Exception as err:
-        print "Error initialising summariser: %s" % err
+        print("Error initialising summariser: %s" % err)
         sys.exit(1)
     try:
         f = open(pidfile, "w")

@@ -308,8 +308,8 @@ def main():
                            ccp.getboolean('logging', 'console'))
         log = logging.getLogger(LOGGER_ID)
     except (ConfigParser.Error, ValueError, IOError) as err:
-        print 'Error configuring logging: %s' % str(err)
-        print 'The system will exit.'
+        print('Error configuring logging: %s' % err)
+        print('The system will exit.')
         sys.exit(1)
 
     run_client(ccp)

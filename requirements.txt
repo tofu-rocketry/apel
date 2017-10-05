@@ -1,6 +1,6 @@
 # Base requirements for apel
 
-MySQL-python
-python-ldap
+mysqlclient
+pyldap
 iso8601
 dirq

@@ -57,8 +57,8 @@ def runprocess(db_config_file, config_file, log_config_file):
         global log
         log = logging.getLogger('dbloader')
     except (ConfigParser.Error, ValueError, IOError) as err:
-        print 'Error configuring logging: %s' % str(err)
-        print 'The system will exit.'
+        print('Error configuring logging: %s' % err)
+        print('The system will exit.')
         sys.exit(1)
 
     log.info('Starting apel dbloader version %s.%s.%s', *__version__)
@@ -79,7 +79,7 @@ def runprocess(db_config_file, config_file, log_config_file):
         save_msgs =  cp.getboolean('loader', 'save_messages')
         
     except Exception as err:
-        print "Error in configuration file: " + str(err)
+        print("Error in configuration file: %s" % err)
         sys.exit(1)
         
     # Create a Loader object
@@ -89,7 +89,7 @@ def runprocess(db_config_file, config_file, log_config_file):
             raise LoaderException(error)
         loader = Loader(qpath, save_msgs, db_backend, db_hostname, db_port, db_name, db_username, db_password, pidfile)
     except Exception as err:
-        print "Error initialising loader: " + str(err)
+        print("Error initialising loader: %s" % err)
         sys.exit(1)
         
     # Once it's initialised correctly, set it going.

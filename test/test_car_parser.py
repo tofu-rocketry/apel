@@ -196,7 +196,7 @@ class CarParserTest(unittest.TestCase):
     #    # Not sure what should be returned with an empty record like this.
     #    parser = CarParser('<urf:UsageRecord xmlns:urf="http://eu-emi.eu/namesp'
     #                       'aces/2012/11/computerecord"></urf:UsageRecord>')
-    #    print parser.get_records()[0]._record_content
+    #    print(parser.get_records()[0]._record_content)
 
 if __name__ == '__main__':
     unittest.main()

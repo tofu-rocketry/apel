@@ -83,7 +83,7 @@ def run_ssm(scp):
                       'or broker network. Please check configuration.')
             log.error('System will exit.')
             log.info()
-            print 'SSM failed to start.  See log file for details.'
+            print('SSM failed to start.  See log file for details.')
             sys.exit(1)
     except ldap.LDAPError as e:
         log.error('Failed to retrieve brokers from LDAP: %s', e)
@@ -371,8 +371,8 @@ def main():
                            ccp.getboolean('logging', 'console'))
         log = logging.getLogger(LOGGER_ID)
     except (ConfigParser.Error, ValueError, IOError) as err:
-        print 'Error configuring logging: %s' % str(err)
-        print 'The system will exit.'
+        print('Error configuring logging: %s' % err)
+        print('The system will exit.')
         sys.exit(1)
 
     run_client(ccp)

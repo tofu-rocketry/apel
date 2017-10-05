@@ -27,7 +27,7 @@ from dirq.queue import Queue
 import apel.db
 from apel.db.loader.xml_parser import XMLParserException
 from apel.db.records import InvalidRecordException
-from record_factory import RecordFactory, RecordFactoryException
+from .record_factory import RecordFactory, RecordFactoryException
 
 
 # set up the logger

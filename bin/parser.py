@@ -30,7 +30,10 @@ import sys
 import re
 import gzip
 import bz2
-import ConfigParser
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 from optparse import OptionParser
 
 from apel import __version__

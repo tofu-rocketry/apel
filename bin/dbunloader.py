@@ -25,7 +25,10 @@ from apel.db import ApelDb, ApelDbException
 from apel.db.unloader import DbUnloader
 from apel import __version__
 from optparse import OptionParser
-import ConfigParser
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 
     
 if __name__ == '__main__':

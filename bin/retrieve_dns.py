@@ -27,7 +27,10 @@ from apel.common import set_up_logging, LOG_BREAK
 from apel import __version__
 
 from optparse import OptionParser
-import ConfigParser
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 import logging.config
 import os
 import sys

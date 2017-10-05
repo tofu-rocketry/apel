@@ -20,7 +20,10 @@
 '''
 
 from optparse import OptionParser
-import ConfigParser
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 import logging.config
 import os
 import sys

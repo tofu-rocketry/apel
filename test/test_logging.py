@@ -1,6 +1,9 @@
 """Test cases for logging function in apel.common.__init__."""
 
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 import logging
 import os
 import sys

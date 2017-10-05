@@ -1,5 +1,8 @@
 import bz2
-import ConfigParser
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 import gzip
 import os
 import re

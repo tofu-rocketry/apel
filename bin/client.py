@@ -70,7 +70,7 @@ def run_ssm(scp):
         brokers = bg.get_broker_hosts_and_ports(service, scp.get('broker',
                                                                  'network'))
         log.info('Found %s brokers.', len(brokers))
-    except ConfigParser.NoOptionError, e:
+    except ConfigParser.NoOptionError as e:
         try:
             host = scp.get('broker', 'host')
             port = scp.get('broker', 'port')
@@ -82,7 +82,7 @@ def run_ssm(scp):
             log.info()
             print 'SSM failed to start.  See log file for details.'
             sys.exit(1)
-    except ldap.LDAPError, e:
+    except ldap.LDAPError as e:
         log.error('Failed to retrieve brokers from LDAP: %s', e)
         log.error('Messages were not sent.')
         return
@@ -100,7 +100,7 @@ def run_ssm(scp):
             destination = scp.get('messaging', 'destination')
             if destination == '':
                 raise Ssm2Exception('No destination queue is configured.')
-        except ConfigParser.NoOptionError, e:
+        except ConfigParser.NoOptionError as e:
             raise Ssm2Exception(e)
 
         ssm = Ssm2(brokers,
@@ -111,7 +111,7 @@ def run_ssm(scp):
                    key=scp.get('certificates', 'key'),
                    use_ssl=scp.getboolean('broker', 'use_ssl'),
                    enc_cert=server_cert)
-    except Ssm2Exception, e:
+    except Ssm2Exception as e:
         log.error('Failed to initialise SSM: %s', e)
         log.error('Messages have not been sent.')
         return
@@ -120,7 +120,7 @@ def run_ssm(scp):
         ssm.handle_connect()
         ssm.send_all()
         ssm.close_connection()
-    except Ssm2Exception, e:
+    except Ssm2Exception as e:
         log.error('SSM failed to complete successfully: %s', e)
         return
 
@@ -181,7 +181,7 @@ def run_client(ccp):
                 except ConfigParser.NoOptionError:
                     exclude_vos = None
 
-    except (ClientConfigException, ConfigParser.Error), err:
+    except (ClientConfigException, ConfigParser.Error) as err:
         log.error('Error in configuration file: ' + str(err))
         sys.exit(1)
 
@@ -201,7 +201,7 @@ def run_client(ccp):
         db.test_connection()
         log.info('Connected.')
 
-    except (ConfigParser.Error, ApelDbException), err:
+    except (ConfigParser.Error, ApelDbException) as err:
         log.error('Error during connecting to database: ' + str(err))
         log.info(LOG_BREAK)
         sys.exit(1)
@@ -248,10 +248,10 @@ def run_client(ccp):
             for value in spec_values:
                 db.update_spec(site_name, value[0], 'si2k', value[1])
             log.info('Spec updater finished.')
-        except ldap.SERVER_DOWN, e:
+        except ldap.SERVER_DOWN as e:
             log.warn('Failed to fetch spec info: %s', e)
             log.warn('Spec updater failed.')
-        except ldap.NO_SUCH_OBJECT, e:
+        except ldap.NO_SUCH_OBJECT as e:
             log.warn('Found no spec values in BDII: %s', e)
             log.warn('Is the site name %s correct?', site_name)
 
@@ -314,7 +314,7 @@ def run_client(ccp):
 
         except KeyError:
             log.warn('Invalid table name: %s, omitting', table_name)
-        except ApelDbException, e:
+        except ApelDbException as e:
             log.warn('Failed to unload records successfully: %s', e)
 
         # Always send sync messages
@@ -367,7 +367,7 @@ def main():
                            ccp.get('logging', 'level'),
                            ccp.getboolean('logging', 'console'))
         log = logging.getLogger(LOGGER_ID)
-    except (ConfigParser.Error, ValueError, IOError), err:
+    except (ConfigParser.Error, ValueError, IOError) as err:
         print 'Error configuring logging: %s' % str(err)
         print 'The system will exit.'
         sys.exit(1)

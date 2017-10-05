@@ -51,7 +51,7 @@ def runprocess(db_config_file, config_file, log_config_file):
         db_username = dbcp.get('db', 'username')
         db_password = dbcp.get('db', 'password')
 
-    except (ConfigParser.Error, ValueError, IOError), err:
+    except (ConfigParser.Error, ValueError, IOError) as err:
         print 'Error in configuration file %s: %s' % (config_file, str(err))
         print 'The system will exit.'
         sys.exit(1)
@@ -70,7 +70,7 @@ def runprocess(db_config_file, config_file, log_config_file):
                            cp.get('logging', 'level'),
                            cp.getboolean('logging', 'console'))
         log = logging.getLogger('summariser')
-    except (ConfigParser.Error, ValueError, IOError), err:
+    except (ConfigParser.Error, ValueError, IOError) as err:
         print 'Error configuring logging: %s' % str(err)
         print 'The system will exit.'
         sys.exit(1)
@@ -83,7 +83,7 @@ def runprocess(db_config_file, config_file, log_config_file):
             log.error("A pidfile %s already exists.", pidfile)
             log.warn("Check that the summariser is not running, then remove the file.")
             raise Exception("The summariser cannot start while pidfile exists.")
-    except Exception, err:
+    except Exception as err:
         print "Error initialising summariser: %s" % err
         sys.exit(1)
     try:
@@ -91,7 +91,7 @@ def runprocess(db_config_file, config_file, log_config_file):
         f.write(str(os.getpid()))
         f.write("\n")
         f.close()
-    except IOError, e:
+    except IOError as e:
         log.warn("Failed to create pidfile %s: %s", pidfile, e)
         # If we fail to create a pidfile, don't start the summariser
         sys.exit(1)
@@ -120,7 +120,7 @@ def runprocess(db_config_file, config_file, log_config_file):
         log.info('Summarising complete.')
         log.info(LOG_BREAK)
 
-    except ApelDbException, err:
+    except ApelDbException as err:
         log.error('Error summarising: ' + str(err))
         log.error('Summarising has been cancelled.')
         sys.exit(1)
@@ -134,7 +134,7 @@ def runprocess(db_config_file, config_file, log_config_file):
             else:
                 log.warn("pidfile %s not found.", pidfile)
 
-        except IOError, e:
+        except IOError as e:
             log.warn("Failed to remove pidfile %s: %s", pidfile, e)
             log.warn("The summariser may not start again until it is removed.")
 

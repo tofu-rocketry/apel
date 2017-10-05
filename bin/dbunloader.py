@@ -52,7 +52,7 @@ if __name__ == '__main__':
                            cp.get('logging', 'level'),
                            cp.getboolean('logging', 'console'))
         log = logging.getLogger('dbunloader')
-    except (ConfigParser.Error, ValueError, IOError), err:
+    except (ConfigParser.Error, ValueError, IOError) as err:
         print 'Error configuring logging: %s' % str(err)
         print 'The system will exit.'
         sys.exit(1)
@@ -70,10 +70,10 @@ if __name__ == '__main__':
                     dbcp.get('db', 'password'),
                     dbcp.get('db', 'name'))
         
-    except ApelDbException, e:
+    except ApelDbException as e:
         log.fatal('Error: %s', e)
         sys.exit(1)
-    except Exception, e:
+    except Exception as e:
         log.fatal('Cannot get configuration: %s', e)
         sys.exit(1)
     
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         log.info('%d records in %d messages unloaded from %s', recs, msgs, table_name)
     except KeyError:
         log.error('Invalid table name: %s, omitting', table_name)
-    except ApelDbException, e:
+    except ApelDbException as e:
         log.error('Unloading failed: %s', e)
 
     log.info('Unloading complete.')

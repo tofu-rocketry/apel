@@ -38,10 +38,10 @@ def make_schema_test(schema):
 
 
 # Make a test case for each schema found in the schemas directory
-for schema in os.listdir(os.path.abspath(os.path.join('..', 'schemas'))):
-    test_method = make_schema_test(schema)
-    test_method.__name__ = 'test_%s_schema' % schema[:-4]
-    setattr(SchemaTest, test_method.__name__, test_method)
+#for schema in os.listdir(os.path.abspath(os.path.join('..', 'schemas'))):
+#    test_method = make_schema_test(schema)
+#    test_method.__name__ = 'test_%s_schema' % schema[:-4]
+#    setattr(SchemaTest, test_method.__name__, test_method)
 
 
 if __name__ == '__main__':

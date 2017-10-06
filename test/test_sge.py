@@ -100,16 +100,16 @@ class ParserSGETest(unittest.TestCase):
             record = self.parser.parse(line)
             cont = record._record_content
 
-            self.assertTrue(cont.has_key("Site"))
-            self.assertTrue(cont.has_key("JobName"))
-            self.assertTrue(cont.has_key("LocalUserID"))
-            self.assertTrue(cont.has_key("LocalUserGroup"))
-            self.assertTrue(cont.has_key("WallDuration"))
-            self.assertTrue(cont.has_key("CpuDuration"))
-            self.assertTrue(cont.has_key("StartTime"))
-            self.assertTrue(cont.has_key("StopTime"))
-            self.assertTrue(cont.has_key("MemoryReal"))
-            self.assertTrue(cont.has_key("MemoryReal"))
+            self.assertTrue("Site" in cont)
+            self.assertTrue("JobName" in cont)
+            self.assertTrue("LocalUserID" in cont)
+            self.assertTrue("LocalUserGroup" in cont)
+            self.assertTrue("WallDuration" in cont)
+            self.assertTrue("CpuDuration" in cont)
+            self.assertTrue("StartTime" in cont)
+            self.assertTrue("StopTime" in cont)
+            self.assertTrue("MemoryReal" in cont)
+            self.assertTrue("MemoryReal" in cont)
 
 
             for key in cases[line].keys():

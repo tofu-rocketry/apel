@@ -40,12 +40,12 @@ class ParserBlahTest(unittest.TestCase):
             cont = record._record_content
 
             # Keys presence in record
-            self.assertTrue(cont.has_key("TimeStamp"))
-            self.assertTrue(cont.has_key("GlobalUserName"))
-            self.assertTrue(cont.has_key("FQAN"))
-            self.assertTrue(cont.has_key("CE"))
-            self.assertTrue(cont.has_key("GlobalJobId"))
-            self.assertTrue(cont.has_key("LrmsId"))
+            self.assertTrue("TimeStamp" in cont)
+            self.assertTrue("GlobalUserName" in cont)
+            self.assertTrue("FQAN" in cont)
+            self.assertTrue("CE" in cont)
+            self.assertTrue("GlobalJobId" in cont)
+            self.assertTrue("LrmsId" in cont)
 
             for key in cases[line].keys():
                 self.assertEqual(cont[key], cases[line][key], "%s != %s for key %s" % (cont[key], cases[line][key], key))

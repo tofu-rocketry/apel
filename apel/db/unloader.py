@@ -24,7 +24,7 @@ from dirq.QueueSimple import QueueSimple
 try:
     import cStringIO as StringIO
 except ImportError:
-    import StringIO
+    import io as StringIO
 import datetime
 import os
 import logging

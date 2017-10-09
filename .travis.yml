@@ -24,7 +24,7 @@ before_script:
   - export PYTHONPATH=$PYTHONPATH:`pwd -P`
   - cd test
 
-script: coverage run --branch --source=apel,bin -m unittest2 discover --buffer
+script: coverage run --branch --source=apel,bin -m unittest2 discover -v --buffer
 
 after_success:
   - coveralls

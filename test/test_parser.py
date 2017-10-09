@@ -43,7 +43,7 @@ class ParserTest(unittest.TestCase):
                 os.close(handle)
                 file_obj = method(path, 'wb')
                 # Write three lines to the file
-                file_obj.write("Line one.\nLine two.\nLine three.")
+                file_obj.write(b"Line one.\nLine two.\nLine three.")
                 file_obj.close()
             records = bin.parser.scan_dir(self.mock_parser, dir_path, False,
                                           re.compile('(.*)'), self.mock_db, [])

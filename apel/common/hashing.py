@@ -19,6 +19,8 @@ try:
 except ImportError:
     from md5 import md5
 import gzip
+import bz2
+
 
 def calculate_hash(fname):
     '''
@@ -33,21 +35,26 @@ def calculate_hash(fname):
 
     md = md5()
 
-    # try opening as a gzip file, and if it fails
-    # try as a regular file
-    try:
-        fp = gzip.open(fname, 'r')
-        while data != '':
-            # 128kiB buffer
-            data = fp.read(131072)
-            md.update(data.encode())
-    except IOError: # not a gzipped file
-        fp = open(fname, 'r')
-        while data != '':
-            # 128kiB buffer
-            data = fp.read(131072)
-            md.update(data.encode())
-
+    # try to open as a bzip2 file, then as a gzip file,
+    # and if it fails try as a regular file
+    #
+    # bz2/gzip doesn't raise an exception when trying
+    # to open a non-gzip file.  Only a read (such as
+    # during parsing) does that.  For files of a wrong
+    # format we will get IOError, empty files can
+    # give EOFError as well.
+    for method in (bz2.BZ2File, gzip.open, open):
+        try:
+            fp = method(fname, 'r')
+            while data != '':
+                # 128kiB buffer
+                data = fp.read(131072)
+                md.update(data.encode())
+            break
+        except (IOError, EOFError):
+            if method == open:
+                # Something has gone wrong if we fail to open as a normal file.
+                raise
 
     fp.close()
     return md.hexdigest()

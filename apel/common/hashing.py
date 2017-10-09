@@ -40,13 +40,13 @@ def calculate_hash(fname):
         while data != '':
             # 128kiB buffer
             data = fp.read(131072)
-            md.update(data)
+            md.update(data.encode())
     except IOError: # not a gzipped file
         fp = open(fname, 'r')
         while data != '':
             # 128kiB buffer
             data = fp.read(131072)
-            md.update(data)
+            md.update(data.encode())
 
 
     fp.close()

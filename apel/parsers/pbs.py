@@ -68,9 +68,9 @@ class PBSParser(Parser):
         if ':' not in data['resources_used.walltime']:
             # Although the duration doesn't need converting if it's already in
             # seconds, this needs to be a function to work with later code.
-            wall_function = lambda y: y
+            wall_function = lambda y: int(y)
         if ':' not in data['resources_used.cput']:
-            cput_function = lambda y: y
+            cput_function = lambda y: int(y)
 
         # map each field to functions which will extract them
         mapping = {'Site'          : lambda x: self.site_name,

@@ -1,9 +1,10 @@
 from apel.common import calculate_hash
-from unittest import TestCase
+import unittest
 import tempfile
 import os
 
-class HashingTest(TestCase):
+
+class HashingTest(unittest.TestCase):
     '''
     Test case for calculate_hash method.
     '''
@@ -22,3 +23,5 @@ class HashingTest(TestCase):
         
         os.unlink(tmpname)
 
+if __name__ == '__main__':
+    unittest.main()

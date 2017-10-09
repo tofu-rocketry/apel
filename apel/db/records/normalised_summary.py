@@ -220,14 +220,16 @@ class NormalisedSummaryRecord(Record):
         cpu.appendChild(doc.createTextNode(str(self.get_field('NumberOfJobs'))))
         ur.appendChild(cpu)
 
-        if self.get_field('Processors') > 0:
+        processors = self.get_field('Processors')
+        if processors is not None and processors > 0:
             procs = doc.createElement('aur:Processors')
-            procs.appendChild(doc.createTextNode(str(self.get_field('Processors'))))
+            procs.appendChild(doc.createTextNode(str(processors)))
             ur.appendChild(procs)
 
-        if self.get_field('NodeCount') > 0:
+        node_count = self.get_field('NodeCount')
+        if node_count is not None and node_count > 0:
             ncount = doc.createElement('aur:NodeCount')
-            ncount.appendChild(doc.createTextNode(str(self.get_field('NodeCount'))))
+            ncount.appendChild(doc.createTextNode(str(node_count)))
             ur.appendChild(ncount)
 
         doc.appendChild(ur)

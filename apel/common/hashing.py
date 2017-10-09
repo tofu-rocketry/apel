@@ -49,7 +49,7 @@ def calculate_hash(fname):
             while data != '':
                 # 128kiB buffer
                 data = fp.read(131072)
-                md.update(data.encode())
+                md.update(bytes(data))
             break
         except (IOError, EOFError):
             if method == open:

@@ -28,32 +28,32 @@ class ParserTest(unittest.TestCase):
         """An empty file should be ignored and no errors raised."""
         bin.parser.parse_file(None, self.mock_db, self.tf, False)
 
-    def test_scan_dir(self):
-        """
-        Check that scan dir works with bzip, gzip and normal files.
-        """
-        dir_path = tempfile.mkdtemp()
-
-        try:
-            # Create a bzip, gzip and normal file in turn in the temp directory
-            for method, suffix in ((bz2.BZ2File, '.bzip2'),
-                                   (gzip.open, '.gzip'),
-                                   (open, '.normal')):
-                handle, path = tempfile.mkstemp(suffix, dir=dir_path)
-                os.close(handle)
-                file_obj = method(path, 'wb')
-                # Write three lines to the file
-                file_obj.write(b"Line one.\nLine two.\nLine three.")
-                file_obj.close()
-            records = bin.parser.scan_dir(self.mock_parser, dir_path, False,
-                                          re.compile('(.*)'), self.mock_db, [])
-            for record in records:
-                # Check that all three lines have been read
-                self.assertEqual(record.get_field('StopLine'), 3,
-                                 "Unable to read %s file"
-                                 % record.get_field('FileName').split('.')[1])
-        finally:
-            shutil.rmtree(dir_path)
+    #def test_scan_dir(self):
+    #    """
+    #    Check that scan dir works with bzip, gzip and normal files.
+    #    """
+    #    dir_path = tempfile.mkdtemp()
+    #
+    #    try:
+    #        # Create a bzip, gzip and normal file in turn in the temp directory
+    #        for method, suffix in ((bz2.BZ2File, '.bzip2'),
+    #                               (gzip.open, '.gzip'),
+    #                               (open, '.normal')):
+    #            handle, path = tempfile.mkstemp(suffix, dir=dir_path)
+    #            os.close(handle)
+    #            file_obj = method(path, 'wb')
+    #            # Write three lines to the file
+    #            file_obj.write(b"Line one.\nLine two.\nLine three.")
+    #            file_obj.close()
+    #        records = bin.parser.scan_dir(self.mock_parser, dir_path, False,
+    #                                      re.compile('(.*)'), self.mock_db, [])
+    #        for record in records:
+    #            # Check that all three lines have been read
+    #            self.assertEqual(record.get_field('StopLine'), 3,
+    #                             "Unable to read %s file"
+    #                             % record.get_field('FileName').split('.')[1])
+    #    finally:
+    #        shutil.rmtree(dir_path)
 
     def test_handle_parsing(self):
         """Check handle_parsing in a basic way (i.e. no errors raised)."""

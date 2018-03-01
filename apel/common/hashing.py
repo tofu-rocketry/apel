@@ -31,7 +31,7 @@ def calculate_hash(fname):
     For sample usage please go to: apel2/bin/client.py
     '''
 
-    data = 'initial'
+    data = b'initial'
 
     md = md5()
 
@@ -45,11 +45,11 @@ def calculate_hash(fname):
     # give EOFError as well.
     for method in (bz2.BZ2File, gzip.open, open):
         try:
-            fp = method(fname, 'r')
-            while data != '':
+            fp = method(fname, 'rb')
+            while data != b'':
                 # 128kiB buffer
                 data = fp.read(131072)
-                md.update(bytes(data))
+                md.update(data)
             break
         except (IOError, EOFError):
             if method == open:

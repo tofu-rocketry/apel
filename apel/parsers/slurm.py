@@ -45,7 +45,7 @@ class SlurmParser(Parser):
         Parser.__init__(self, site, machine_name, mpi)
         log.info('Site: %s; batch system: %s', self.site_name, self.machine_name)
 
-    def parse(self, line):
+    def parse(self, line,rmem=None,vmem=None):
         """Parse single line from accounting log file."""
         # Some sites will use TotalCPU rather than CPUTimeRAW
 
@@ -54,6 +54,27 @@ class SlurmParser(Parser):
         #  $JOBID >> /var/log/apel/slurm_acc.20130311
 
         # 1007|cream_612883006|dteam005|dteam|2013-03-27T17:13:41|2013-03-27T17:13:44|00:00:03|3|prod|1|1|cert-40|||COMPLETED
+
+        #3410139|rady461|sd565|elem|2015-09-12T20:40:34|2015-09-14T00:05:09|1-03:24:35|98675|medium|1|1|n061813|16?|16?|COMPLETED
+        #3410139.batch|batch|||2015-09-12T20:40:34|2015-09-14T00:05:09|1-03:24:35|98675||1|1|n061813|83724K|2495840K|COMPLETED
+        #>>> for i in range(0,15):
+        #    ...    print i, line.split("|")[i]
+        #    ...
+        #    0 3410139
+        #    1 rady461
+        #    2 sd565
+        #    3 elem
+        #    4 2015-09-12T20:40:34
+        #    5 2015-09-14T00:05:09
+        #    6 1-03:24:35
+        #    7 98675
+        #    8 medium
+        #    9 1
+        #    10 1
+        #    11 n061813
+        #    12 16?
+        #    13 16?
+        #    14 COMPLETED
 
         # log.info('line: %s' % (line));
         values = line.strip().split('|')
@@ -71,9 +92,18 @@ class SlurmParser(Parser):
             # TotalCPU used which has the form d-h:m:s, h:m:s or m:s.s.
             cput_function = parse_time
 
-        rmem = self._normalise_memory(values[12])
+        if ".batch" in line:
+            return None
 
-        vmem = self._normalise_memory(values[13])
+        if rmem:
+            rmem = self._normalise_memory(rmem)
+        else:
+            rmem = self._normalise_memory(values[12])
+
+        if vmem:
+            vmem = self._normalise_memory(vmem)
+        else:
+            vmem = self._normalise_memory(values[13])
 
         mapping = {'Site'            : lambda x: self.site_name,
                    'MachineName'     : lambda x: self.machine_name,

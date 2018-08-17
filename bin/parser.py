@@ -107,8 +107,18 @@ def parse_file(parser, apel_db, fp, replace):
         # Indexing is from zero so add 1 to find line number. Can't use start=1
         # in enumerate() to maintain Python 2.4 compatibility.
         line_number = index + 1
+        if ".batch" in line:
+            continue
         try:
-            record = parser.parse(line)
+            ## added the next 6 lines to deal with new slurm output
+            rmem = vmem = None
+            if "COMPLETED" in line:
+                "only consider completed jobs, since only these are accounted for"
+                nextline = next(fp)
+                values = nextline.strip().split('|')
+                rmem = values[12]
+                vmem = values[13]
+            record = parser.parse(line,rmem,vmem)
         except Exception, e:
             log.debug('Error %s on line %d', e, line_number)
             failed += 1

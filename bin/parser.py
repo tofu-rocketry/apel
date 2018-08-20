@@ -110,15 +110,15 @@ def parse_file(parser, apel_db, fp, replace):
         if ".batch" in line:
             continue
         try:
-            ## added the next 6 lines to deal with new slurm output
+            # added the next 6 lines to deal with new slurm output
             rmem = vmem = None
             if "COMPLETED" in line:
-                "only consider completed jobs, since only these are accounted for"
+                # only consider completed jobs, since only these are accounted
                 nextline = next(fp)
                 values = nextline.strip().split('|')
                 rmem = values[12]
                 vmem = values[13]
-            record = parser.parse(line,rmem,vmem)
+            record = parser.parse(line, rmem, vmem)
         except Exception, e:
             log.debug('Error %s on line %d', e, line_number)
             failed += 1

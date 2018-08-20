@@ -45,7 +45,7 @@ class SlurmParser(Parser):
         Parser.__init__(self, site, machine_name, mpi)
         log.info('Site: %s; batch system: %s', self.site_name, self.machine_name)
 
-    def parse(self, line,rmem=None,vmem=None):
+    def parse(self, line, rmem=None, vmem=None):
         """Parse single line from accounting log file."""
         # Some sites will use TotalCPU rather than CPUTimeRAW
 

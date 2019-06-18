@@ -26,8 +26,8 @@ class BinSummariserTest(unittest.TestCase):
                                                            dir=self._tmp_dir)
 
         # Populate the database config (with junk)
-        os.write(self.db_cfg, DB_CONF)
-        os.close(self.db_cfg)
+        with os.fdopen(self.db_cfg, 'w') as db_cfg:
+            db_cfg.write(DB_CONF)
 
     def test_lock_file(self):
         """Test a existing Pidfile prevents a summariser from starting."""
@@ -53,8 +53,8 @@ class BinSummariserTest(unittest.TestCase):
                     'console = false\n' % (pid_path, sum_log_path))
 
         # Write temporary config to the temporary file
-        os.write(self.sum_cfg, sum_conf)
-        os.close(self.sum_cfg)
+        with os.fdopen(self.sum_cfg, 'w') as sum_cfg:
+            sum_cfg.write(sum_conf)
 
         # Run the summariser with the temporary config files
         try:

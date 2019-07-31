@@ -42,7 +42,9 @@ log = logging.getLogger('auth')
 class Configuration(object):
     """Dummy class for attaching configuration to."""
     def __init__(self):
-        self.gocdb_url = None
+        self.gocdb_hosts = []
+        self.service_types = []
+        self.gocdb_path = None
         self.extra_dns = None
         self.banned_dns = None
         self.dn_file = None
@@ -56,12 +58,22 @@ def get_config(config_file):
     cp.read(config_file)
     
     c = Configuration()
-    
+
     try:
-        c.gocdb_url = cp.get('auth', 'gocdb_url')
+        c.gocdb_hosts = [h.strip() for h in cp.get('auth', 'gocdb_hosts').split(',')]
     except ConfigParser.NoOptionError:
-        c.gocdb_url = None
-        
+        c.gocdb_hosts = []
+
+    try:
+        c.service_types = [s.strip() for s in cp.get('auth', 'service_types').split(',')]
+    except ConfigParser.NoOptionError:
+        c.service_types = []
+
+    try:
+        c.gocdb_path = cp.get('auth', 'gocdb_path')
+    except ConfigParser.NoOptionError:
+        c.gocdb_path = None
+
     try:
         extra_dns = cp.get('auth', 'extra-dns')
         c.extra_dns = os.path.normpath(os.path.expandvars(extra_dns))
@@ -105,6 +117,15 @@ def get_config(config_file):
         sys.exit(1)
         
     return c
+
+
+def _assemble_url(hostname, path, service_type):
+    if None in (hostname, path, service_type):
+        return None
+    if path[0] != '/':
+        path = '/{0}'.format(path)
+    url = "https://{0}{1}{2}".format(hostname, path, service_type)
+    return url
 
 
 def get_xml(url, proxy):
@@ -223,7 +244,11 @@ def runprocess(config_file, log_config_file):
     xml_string = None
     fetch_failed = False
 
-    next_url = cfg.gocdb_url
+    for hostname in cfg.gocdb_hosts:
+        for service_type in cfg.service_types:
+            gocdb_url = _assemble_url(hostname, cfg.gocdb_path, service_type)
+
+    next_url = gocdb_url
     try:
         # If next_url is none, it implies we have reached the end of paging
         # (or that paging was not turned on).
@@ -244,13 +269,13 @@ def runprocess(config_file, log_config_file):
                 log.warn('Failed to parse the retrieved XML.')
                 log.warn('Is the URL correct?')
                 fetch_failed = True
-    except AttributeError:
-        # gocdb_url == None
-        log.info("No GOCDB URL specified - won't fetch URLs.")
     except IOError, e:
         log.info("Failed to retrieve XML - is the URL correct?")
         log.info(e)
         fetch_failed = True
+    except AttributeError:
+        # gocdb_url == None
+        log.info("No GOCDB URL specified - won't fetch URLs.")
 
     if fetch_failed and (time.time() - os.path.getmtime(cfg.dn_file) <
                          (cfg.expire_hours * 3600)):

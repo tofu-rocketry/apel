@@ -106,7 +106,9 @@ class RunprocessTestCase(unittest.TestCase):
         c.extra_dns = self.files['extra']['path']
         c.banned_dns = self.files['ban']['path']
         c.expire_hours = 1
-        c.gocdb_url = "not.a.host"
+        c.gocdb_hosts = ["not.a.host", ]
+        c.service_types = ["not.a.type", "not.another.type"]
+        c.gocdb_path = "not.a.path="
         mock_config.return_value = c
 
     def test_next_link_from_dom(self):

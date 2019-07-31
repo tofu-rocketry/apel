@@ -254,6 +254,9 @@ def runprocess(config_file, log_config_file):
         # (or that paging was not turned on).
         # The addition of 'not fetch_failed' catches the case where no XML is
         # returned from next_url (i.e. gocdb_url).
+
+        # TODO: make iterative - yield dom
+
         while next_url is not None and not fetch_failed:
             xml_string = get_xml(next_url, cfg.proxy)
             log.info("Fetched XML from %s", next_url)
@@ -333,8 +336,20 @@ def runprocess(config_file, log_config_file):
 
     log.info("auth has finished.")
     log.info(LOG_BREAK)
-    
-    
+
+
+def _dom_iterator(url, proxy):
+    while url:
+        xml_string = get_xml(url, proxy)
+        log.info("Fetched XML from %s", url)
+
+        # Parse the XML into a Document Object Model
+        dom = xml.dom.minidom.parseString(xml_string)
+        # Get the next url, if any
+        url = next_link_from_dom(dom)
+        yield dom
+
+
 if __name__ == '__main__':
     ver = "APEL auth %s.%s.%s" % __version__
     opt_parser = OptionParser(description=__doc__, version=ver)

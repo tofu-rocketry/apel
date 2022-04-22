@@ -15,7 +15,6 @@
 
    @author: Konrad Jopek, Will Rogers
 '''
-
 from future import standard_library
 standard_library.install_aliases()
 from future.builtins import object, str
@@ -34,11 +33,12 @@ except ImportError:
 from apel.db import (Query, ApelDbException, JOB_MSG_HEADER, JOB_MSG_HEADER_04,
                      SUMMARY_MSG_HEADER, SUMMARY_MSG_HEADER_04,
                      NORMALISED_SUMMARY_MSG_HEADER, NORMALISED_SUMMARY_MSG_HEADER_04,
-                     SYNC_MSG_HEADER,
-                     CLOUD_MSG_HEADER, CLOUD_SUMMARY_MSG_HEADER)
+                     SYNC_MSG_HEADER, CLOUD_MSG_HEADER, CLOUD_SUMMARY_MSG_HEADER,
+                     ACCELERATOR_MSG_TYPE)
 from apel.db.records import (JobRecord, JobRecord04, SummaryRecord, SummaryRecord04,
                              NormalisedSummaryRecord, NormalisedSummaryRecord04,
-                             SyncRecord, CloudRecord, CloudSummaryRecord, StorageRecord)
+                             SyncRecord, CloudRecord, CloudSummaryRecord, StorageRecord,
+                             AcceleratorRecord)
 from dirq.QueueSimple import QueueSimple
 
 
@@ -52,7 +52,9 @@ class DbUnloader(object):
                     NormalisedSummaryRecord: NORMALISED_SUMMARY_MSG_HEADER,
                     SyncRecord: SYNC_MSG_HEADER,
                     CloudRecord: CLOUD_MSG_HEADER,
-                    CloudSummaryRecord: CLOUD_SUMMARY_MSG_HEADER}
+                    CloudSummaryRecord: CLOUD_SUMMARY_MSG_HEADER,
+                    AcceleratorRecord: ACCELERATOR_MSG_TYPE,
+                    }
 
     RECORD_TYPES = {'VJobRecords': JobRecord,
                     'VSummaries': SummaryRecord,
@@ -62,7 +64,9 @@ class DbUnloader(object):
                     'VSyncRecords': SyncRecord,
                     'VCloudRecords': CloudRecord,
                     'VCloudSummaries': CloudSummaryRecord,
-                    'VStarRecords': StorageRecord}
+                    'VStarRecords': StorageRecord,
+                    'AcceleratorRecords': AcceleratorRecord,
+                    }
 
     DICT_RECORD_TYPES = {'VJobRecords': JobRecord04,
                          'VSummaries': SummaryRecord04,

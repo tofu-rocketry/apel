@@ -37,6 +37,8 @@ CREATE TABLE JobRecords (
 
   ServiceLevelType VARCHAR(50) NOT NULL,
   ServiceLevel DECIMAL(10,3) NOT NULL,
+  AltServiceLevelType VARCHAR(50),
+  AltServiceLevel DECIMAL(10,3),
 
   PublisherDNID INT NOT NULL,        -- Foreign key
 
@@ -66,13 +68,14 @@ CREATE PROCEDURE ReplaceJobRecord(
   startTime DATETIME, endTime DATETIME, infrastructureDescription VARCHAR(100), infrastructureType VARCHAR(20),
   memoryReal INT, memoryVirtual INT,
   serviceLevelType VARCHAR(50), serviceLevel DECIMAL(10,3),
+  altServiceLevelType VARCHAR(50), altServiceLevel DECIMAL(10,3),
   publisherDN VARCHAR(255))
 BEGIN
     REPLACE INTO JobRecords(SiteID, SubmitHostID, MachineNameID, QueueID,
         LocalJobId, LocalUserId, GlobalUserNameID, FQAN,
         VOID, VOGroupID, VORoleID, WallDuration, CpuDuration, Processors, NodeCount,
         StartTime, EndTime, EndYear, EndMonth, InfrastructureDescription, InfrastructureType, MemoryReal, MemoryVirtual, ServiceLevelType,
-        ServiceLevel, PublisherDNID)
+        ServiceLevel, AltServiceLevelType, AltServiceLevel, PublisherDNID)
     VALUES (
         SiteLookup(site), SubmitHostLookup(submitHost), MachineNameLookup(machineName),
         QueueLookup(queue), localJobId, localUserId,
@@ -80,7 +83,7 @@ BEGIN
         VOGroupLookup(voGroup), VORoleLookup(voRole), wallDuration, cpuDuration,
         IFNULL(processors, 0), IFNULL(nodeCount, 0), startTime, endTime,
         YEAR(endTime), MONTH(endTime), infrastructureDescription, infrastructureType, memoryReal,
-        memoryVirtual, serviceLevelType, serviceLevel, DNLookup(publisherDN)
+        memoryVirtual, serviceLevelType, serviceLevel, altServiceLevelType, altServiceLevel, DNLookup(publisherDN)
         );
 END //
 DELIMITER ;
@@ -102,6 +105,8 @@ CREATE TABLE Summaries (
   InfrastructureType VARCHAR(20),
   ServiceLevelType VARCHAR(50) NOT NULL,
   ServiceLevel DECIMAL(10,3) NOT NULL,
+  AltServiceLevelType VARCHAR(50),
+  AltServiceLevel DECIMAL(10,3),
   NodeCount INT NOT NULL,
   Processors INT NOT NULL,
   EarliestEndTime DATETIME,
@@ -122,17 +127,18 @@ CREATE PROCEDURE ReplaceSummary(
   site VARCHAR(255),  month INT,  year INT,
   globalUserName VARCHAR(255), vo VARCHAR(255), voGroup VARCHAR(255), voRole VARCHAR(255),
   submitHost VARCHAR(255), infrastructureType VARCHAR(50), serviceLevelType VARCHAR(50), serviceLevel DECIMAL(10,3),
+  altServiceLevelType VARCHAR(50), altServiceLevel DECIMAL(10,3),
   nodeCount INT, processors INT, earliestEndTime DATETIME, latestEndTime DATETIME, wallDuration BIGINT, cpuDuration BIGINT,
-   numberOfJobs INT, publisherDN VARCHAR(255))
+  numberOfJobs INT, publisherDN VARCHAR(255))
 BEGIN
     REPLACE INTO Summaries(SiteID, Month, Year, GlobalUserNameID, VOID,
-        VOGroupID, VORoleID, SubmitHostId, InfrastructureType, ServiceLevelType, ServiceLevel,
+        VOGroupID, VORoleID, SubmitHostId, InfrastructureType, ServiceLevelType, ServiceLevel, AltServiceLevelType, AltServiceLevel,
         NodeCount, Processors, EarliestEndTime, LatestEndTime, WallDuration,
         CpuDuration, NumberOfJobs, PublisherDNID)
       VALUES (
         SiteLookup(site), month, year, DNLookup(globalUserName), VOLookup(vo),
         VOGroupLookup(voGroup), VORoleLookup(voRole), SubmitHostLookup(submitHost),
-        infrastructureType, serviceLevelType, serviceLevel, nodeCount, processors, earliestEndTime,
+        infrastructureType, serviceLevelType, serviceLevel, altServiceLevelType, altServiceLevel, nodeCount, processors, earliestEndTime,
         latestEndTime, wallDuration, cpuDuration, numberOfJobs, DNLookup(publisherDN));
 END //
 DELIMITER ;
@@ -160,6 +166,8 @@ CREATE TABLE NormalisedSummaries (
   CpuDuration BIGINT UNSIGNED NOT NULL,
   NormalisedWallDuration BIGINT UNSIGNED NOT NULL,
   NormalisedCpuDuration BIGINT UNSIGNED NOT NULL,
+  AltNormalisedWallDuration BIGINT UNSIGNED,
+  AltNormalisedCpuDuration BIGINT UNSIGNED,
   NumberOfJobs BIGINT UNSIGNED NOT NULL,
   PublisherDNID INT NOT NULL,
 
@@ -175,18 +183,20 @@ CREATE PROCEDURE ReplaceNormalisedSummary(
   globalUserName VARCHAR(255), vo VARCHAR(255), voGroup VARCHAR(255), voRole VARCHAR(255),
   submitHost VARCHAR(255), infrastructure VARCHAR(50),
   nodeCount INT, processors INT, earliestEndTime DATETIME, latestEndTime DATETIME, wallDuration BIGINT, cpuDuration BIGINT,
-  normalisedWallDuration BIGINT, normalisedCpuDuration BIGINT, numberOfJobs INT, publisherDN VARCHAR(255))
+  normalisedWallDuration BIGINT, normalisedCpuDuration BIGINT, altNormalisedWallDuration BIGINT, altNormalisedCpuDuration BIGINT, numberOfJobs INT, publisherDN VARCHAR(255))
 BEGIN
     REPLACE INTO NormalisedSummaries(SiteID, Month, Year, GlobalUserNameID, VOID,
         VOGroupID, VORoleID, SubmitHostId, Infrastructure,
         NodeCount, Processors, EarliestEndTime, LatestEndTime, WallDuration,
         CpuDuration, NormalisedWallDuration, NormalisedCpuDuration,
+        AltNormalisedWallDuration, AltNormalisedCpuDuration,
         NumberOfJobs, PublisherDNID)
       VALUES (
         SiteLookup(site), month, year, DNLookup(globalUserName), VOLookup(vo),
         VOGroupLookup(voGroup), VORoleLookup(voRole), SubmitHostLookup(submitHost),
         infrastructure, nodeCount, processors, earliestEndTime,
         latestEndTime, wallDuration, cpuDuration, normalisedWallDuration, normalisedCpuDuration,
+        altNormalisedWallDuration, altNormalisedCpuDuration,
         numberOfJobs, DNLookup(publisherDN));
 END //
 DELIMITER ;
@@ -209,6 +219,8 @@ CREATE TABLE SuperSummaries (
   InfrastructureType VARCHAR(20),
   ServiceLevelType VARCHAR(50) NOT NULL,
   ServiceLevel DECIMAL(10,3) NOT NULL,
+  AltServiceLevelType VARCHAR(50),
+  AltServiceLevel DECIMAL(10,3),
   NodeCount INT NOT NULL,
   Processors INT NOT NULL,
   EarliestEndTime DATETIME,
@@ -243,6 +255,8 @@ CREATE TABLE HybridSuperSummaries (
   normalised summaries (which lack service level fields) are copied in.*/
   ServiceLevelType VARCHAR(50) NOT NULL DEFAULT '',
   ServiceLevel DECIMAL(10,3) NOT NULL DEFAULT 0,
+  AltServiceLevelType VARCHAR(50),
+  AltServiceLevel DECIMAL(10,3),
   NodeCount INT NOT NULL,
   Processors INT NOT NULL,
   EarliestEndTime DATETIME,
@@ -251,6 +265,8 @@ CREATE TABLE HybridSuperSummaries (
   CpuDuration BIGINT UNSIGNED NOT NULL,
   NormalisedWallDuration BIGINT UNSIGNED NOT NULL,
   NormalisedCpuDuration BIGINT UNSIGNED NOT NULL,
+  AltNormalisedWallDuration BIGINT UNSIGNED,
+  AltNormalisedCpuDuration BIGINT UNSIGNED,
   NumberOfJobs BIGINT UNSIGNED NOT NULL,
 
   PRIMARY KEY (SiteID, Month, Year, GlobalUserNameID, VOID, VORoleID, VOGroupID,
@@ -265,9 +281,10 @@ DELIMITER //
 CREATE PROCEDURE SummariseJobs()
 BEGIN
   REPLACE INTO HybridSuperSummaries(SiteID, Month, Year, GlobalUserNameID, VOID,
-    VOGroupID, VORoleID, SubmitHostID, Infrastructure, ServiceLevelType,
-    ServiceLevel, NodeCount, Processors, EarliestEndTime, LatestEndTime,
+    VOGroupID, VORoleID, SubmitHostID, Infrastructure, ServiceLevelType, ServiceLevel,
+    AltServiceLevelType, AltServiceLevel, NodeCount, Processors, EarliestEndTime, LatestEndTime,
     WallDuration, CpuDuration, NormalisedWallDuration, NormalisedCpuDuration,
+    AltNormalisedWallDuration, AltNormalisedCpuDuration,
     NumberOfJobs)
   SELECT SiteID,
          EndMonth AS Month,
@@ -280,6 +297,8 @@ BEGIN
          InfrastructureType,
          ServiceLevelType,
          ServiceLevel,
+         AltServiceLevelType,
+         AltServiceLevel,
          NodeCount,
          Processors,
          MIN(EndTime) AS EarliestEndTime,
@@ -288,11 +307,13 @@ BEGIN
          SUM(CpuDuration) AS SumCPU,
          ROUND(SUM(IF(WallDuration > 0, WallDuration, 0) * IF(ServiceLevelType = "HEPSPEC", ServiceLevel, ServiceLevel / 250))) AS NormSumWCT,
          ROUND(SUM(IF(CpuDuration > 0, CpuDuration, 0) * IF(ServiceLevelType = "HEPSPEC", ServiceLevel, ServiceLevel / 250))) AS NormSumCPU,
+         IF(AltServiceLevel IS NOT NULL, ROUND(SUM(IF(WallDuration > 0, WallDuration, 0) * AltServiceLeve)), NULL) AS AltNormSumWCT,
+         IF(AltServiceLevel IS NOT NULL, ROUND(SUM(IF(CpuDuration > 0, CpuDuration, 0) * AltServiceLevel)), NULL) AS AltNormSumCPU,
          COUNT(*) AS Njobs
   FROM JobRecords
   GROUP BY SiteID, VOID, GlobalUserNameID, VOGroupID, VORoleID, EndYear,
            EndMonth, InfrastructureType, SubmitHostID, ServiceLevelType,
-           ServiceLevel, NodeCount, Processors;
+           ServiceLevel, AltServiceLevelType, AltServiceLevel, NodeCount, Processors;
 END //
 DELIMITER ;
 

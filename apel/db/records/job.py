@@ -312,3 +312,77 @@ class JobRecord(Record):
         # We don't want the XML declaration, because the whole XML
         # document will be assembled by another part of the program.
         return doc.documentElement.toxml()
+
+
+class MultiBenchmarkJobRecord(JobRecord):
+
+    def __init__(self):
+        super.__init__()
+
+        # This list allows us to specify the order of lines when we construct records.
+        self._msg_fields  = ["Site", "SubmitHost", "MachineName", "Queue", "LocalJobId", "LocalUserId",
+                       "GlobalUserName", "FQAN", "VO", "VOGroup", "VORole", "WallDuration",
+                       "CpuDuration", "Processors", "NodeCount", "StartTime", "EndTime", "InfrastructureDescription", "InfrastructureType",
+                       "MemoryReal", "MemoryVirtual", "ServiceLevel"]
+
+        # This list specifies the information that goes in the database.
+        self._db_fields = ["Site", "SubmitHost", "MachineName", "Queue", "LocalJobId", "LocalUserId",
+                       "GlobalUserName", "FQAN", "VO",
+                       "VOGroup", "VORole", "WallDuration", "CpuDuration", "Processors",
+                       "NodeCount", "StartTime", "EndTime", "InfrastructureDescription", "InfrastructureType", "MemoryReal",
+                       "MemoryVirtual", "ServiceLevelType", "ServiceLevel", "AltServiceLevelType", "AltServiceLevel"]
+
+        # Fields which are accepted but currently ignored.
+        self._ignored_fields = ["SubmitHostType", "UpdateTime"]
+
+        self._all_fields = self._msg_fields + self._ignored_fields
+
+        # Fields which will have an integer stored in them
+        self._int_fields = ["WallDuration", "CpuDuration", "Processors",
+                            "NodeCount", "MemoryReal",
+                            "MemoryVirtual"]
+
+        self._dict_fields = ["ServiceLevel"]
+
+        self._datetime_fields = ["StartTime", "EndTime"]
+
+        # Acceptable values for the ServiceLevelType field, not case-sensitive
+        self._valid_slts = ["si2k", "hepspec", "hepscore23"]
+
+
+    def _check_fields(self):
+        '''
+        Add extra checks to those made in every record.
+        '''
+        # First, call the parent's version.
+        Record._check_fields(self)
+
+        # Extract the relevant information from the user fqan.
+        # Keep the fqan itself as other methods in the class use it.
+        if self._record_content['FQAN'] not in ('None', None):
+
+            role, group, vo = parse_fqan(self._record_content['FQAN'])
+            # We can't / don't put NULL in the database, so we use 'None'
+            if role is None:
+                role = 'None'
+            if group is None:
+                group = 'None'
+            if vo is None:
+                vo = 'None'
+
+            self._record_content['VORole'] = role
+            self._record_content['VOGroup'] = group
+            # Confusing terminology from the CAR
+            self._record_content['VO'] = vo
+
+
+        # Check the ScalingFactor.
+        slt = self._record_content['ServiceLevelType']
+        sl = self._record_content['ServiceLevel']
+
+        (slt, sl) = self._check_factor(slt, sl)
+        self._record_content['ServiceLevelType'] = slt
+        self._record_content['ServiceLevel'] = sl
+
+        # Check the values of StartTime and EndTime
+        self._check_start_end_times()

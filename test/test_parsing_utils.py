@@ -22,6 +22,7 @@ class ParsingUtilsTest(unittest.TestCase):
 
         short_fqan1 = "/no/role/or/equals"
         short_fqan2 = "/someorg/somegroup"
+        short_fqan3 = "/wlcg"
 
         self.assertEqual(parse_fqan(wrong_fqan1), (None, None, wrong_fqan1))
         self.assertEqual(parse_fqan(wrong_fqan2), (None, None, wrong_fqan2))
@@ -33,6 +34,7 @@ class ParsingUtilsTest(unittest.TestCase):
 
         self.assertEqual(parse_fqan(short_fqan1), ('None', '/no/role/or/equals', 'no'))
         self.assertEqual(parse_fqan(short_fqan2), ('None', '/someorg/somegroup', 'someorg'))
+        self.assertEqual(parse_fqan(short_fqan3), ('None', '/wlcg', 'wlcg'))
 
 if __name__ == '__main__':
     unittest.main()

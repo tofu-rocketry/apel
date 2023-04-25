@@ -15,6 +15,10 @@ class ParserBlahTest(unittest.TestCase):
     def setUp(self):
         self.parser = BlahParser('testSite', 'testHost')
 
+    def test_simple_userfqan(self):
+        line = ('"timestamp=2022-11-29 12:30:20" "userDN=/C=UK/O=eScience/OU=Imperial/L=Physics/CN=user name" "userFQAN=/wlcg" "ceID=ceprod02.grid.hep.ph.ic.ac.uk:9619/ceprod02.grid.hep.ph.ic.ac.uk-condor" "jobID=789296.0_ceprod02.grid.hep.ph.ic.ac.uk" "lrmsID=ceprod02.grid.hep.ph.ic.ac.uk#4811256.0#1669722671" "localUser=wlcg054"')
+        record = self.parser.parse(line)
+        print(record._record_content)
 
     def test_parse(self):
         line1 = ('"timestamp=2012-05-20 23:59:47" '

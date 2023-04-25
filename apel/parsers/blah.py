@@ -53,7 +53,7 @@ class BlahParser(Parser):
 
         #  split file and remove parts which contain only space (like ' ')
         parts = [x.split('=',1) for x in [y for y in self.LINE_EXPR.split(line) if len(y) > 1]]
-
+        print(parts)
         # Simple mapping between keys in a log file and a table's columns
         mapping = {
             'TimeStamp'      : lambda x: 'T'.join(x['timestamp'].split()) + 'Z',
@@ -71,6 +71,8 @@ class BlahParser(Parser):
             'Processed'      : lambda x: Parser.UNPROCESSED}
 
         for key, value in parts:
+            if key=="VORole":
+                print(value)
             # Store only the first value encountered. This is mainly for the
             # userFQAN field as the first occurence of this is the primary FQAN.
             if key not in data:

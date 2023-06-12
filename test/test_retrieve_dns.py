@@ -96,8 +96,8 @@ class RunprocessTestCase(unittest.TestCase):
             self.files[item] = dict(zip(('handle', 'path'), tempfile.mkstemp()))
 
         os.write(self.files['dn']['handle'], "/dn/1\n/dn/2\n".encode("utf-8"))
-        os.write(self.files['extra']['handle'], "#comment\n/extra/dn\n/banned/dn".encode("utf-8"))
-        os.write(self.files['ban']['handle'], "/banned/dn".encode("utf-8"))
+        os.write(self.files['extra']['handle'], "#comment\n/extra/dn\n/banned/dn\nNot a DN.".encode("utf-8"))
+        os.write(self.files['ban']['handle'], "Not a DN.\n/banned/dn\n#comment".encode("utf-8"))
 
         for item in list(self.files.values()):
             os.close(item['handle'])

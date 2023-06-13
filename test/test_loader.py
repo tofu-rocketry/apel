@@ -55,10 +55,10 @@ class LoaderTest(unittest.TestCase):
 
         in_q = dirq.queue.Queue(os.path.join(self.dir_path, 'incoming'),
                                 schema=schema)
-        in_q.add({"body": "bad message", "signer": "test signer", "empaid": "",
+        in_q.add({"body": "bad message", "signer": "test signer", "empaid": "1",
                   "error": ""})
         in_q.add({"body": "APEL-summary-job-message: v0.3",
-                  "signer": "test signer", "empaid": "", "error": ""})
+                  "signer": "test signer", "empaid": "2", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -102,7 +102,7 @@ class LoaderTest(unittest.TestCase):
                     CpuDuration: 2345
                     NumberOfJobs: 100
                     %%""",
-                  "signer": "test signer", "empaid": "", "error": ""})
+                  "signer": "test signer", "empaid": "1", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -134,7 +134,7 @@ class LoaderTest(unittest.TestCase):
                     CpuDuration: 2345
                     NumberOfJobs: 100
                     %%""",
-                  "signer": "test signer", "empaid": "", "error": ""})
+                  "signer": "test signer", "empaid": "2", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -174,7 +174,7 @@ class LoaderTest(unittest.TestCase):
         </sr:StorageUsageRecords> """
 
         in_q.add({"body": body,
-                  "signer": "test signer", "empaid": "", "error": ""})
+                  "signer": "test signer", "empaid": "1", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -246,6 +246,41 @@ class LoaderTest(unittest.TestCase):
             mock_log.assert_has_calls(
                         [call('Message contains %i %s records', 2, 'Accelerator')])
 
+
+    def test_load_all_msgs(self):
+        """Check that load_records is called with an empty list."""
+        pidfile = os.path.join(self.dir_path, 'pidfile')
+
+        valid_body = """APEL-summary-job-message: v0.2
+                    Site: RAL-LCG2
+                    Month: 3
+                    Year: 2010
+                    GlobalUserName: /C=whatever/D=someDN
+                    VO: atlas
+                    VOGroup: /atlas
+                    VORole: Role=production
+                    WallDuration: 234256
+                    CpuDuration: 2345
+                    NumberOfJobs: 100
+                    %%"""
+        
+        in_q = dirq.queue.Queue(os.path.join(self.dir_path, 'incoming'),
+                                schema=schema)
+        re_q = dirq.queue.Queue(os.path.join(self.dir_path, 'reject'),
+                                schema=schema)
+
+        in_q.add({"body": "    ", "signer": "   ", "empaid": "3",
+                  "error": ""})
+        in_q.add({"body": valid_body, "signer": "Test signer", "empaid": "4",
+                  "error": ""})
+        in_q.add({"body": "Still it is a Bad Message", "signer": "Test signer", "empaid": "5",
+                  "error": ""})
+
+        self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
+                                            'host', 1234, 'db', 'user', 'pwd',
+                                            pidfile)
+        self.loader.load_all_msgs()
+        self.assertEquals(re_q.count(), 2)
 
     def tearDown(self):
         shutil.rmtree(self.dir_path)

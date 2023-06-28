@@ -146,12 +146,10 @@ class Loader:
             try:
                 log.info("Loading message %s. ID = %s", self.current_msg, msg_id)
 
-                if (
-                    not data or
-                    not data['body'].strip() or
-                    not data['signer'].strip() or
-                    not data['empaid'].strip()
-                ):
+                if (not data or
+                        not data['body'].strip() or
+                        not data['signer'].strip() or
+                        not data['empaid'].strip()):
                     raise LoaderException(
                         "Cannot load incomplete message from an incoming queue"
                     )

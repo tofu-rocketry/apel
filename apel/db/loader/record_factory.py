@@ -20,6 +20,11 @@ Module containing the RecordFactory class.
 
 from future.builtins import object
 
+import json
+import logging
+
+import jsonschema
+
 from apel.common.message_schemas import ACCELERATOR_MSG_SCHEMA
 from apel.common.message_schemas import ACCELERATOR_SUMMARY_MSG_SCHEMA
 from apel.db.records.job import JobRecord, JobRecord04
@@ -41,9 +46,6 @@ from apel.db.loader.aur_parser import AurParser
 from apel.db.loader.star_parser import StarParser
 from apel.db.loader.xml_parser import get_primary_ns
 
-import json
-import jsonschema
-import logging
 
 # Set up logging
 log = logging.getLogger(__name__)
@@ -113,7 +115,7 @@ class RecordFactory(object):
                         )
 
                 # Catch the case where the JSON message type is not defined.
-                except KeyError as key_error:
+                except KeyError:
                     raise RecordFactoryException(
                         'Type of JSON message not provided.'
                     )
@@ -184,13 +186,13 @@ class RecordFactory(object):
                 )
             )
 
-    def _unpack_json_records(self, js, RecordType):
+    def _unpack_json_records(self, js, record_type):
         """Loop through UsageRecords in JSON and
-            return a set of populated RecordType objects"""
+            return a set of populated record_type objects"""
         created_records = []
 
         for record_dict in js['UsageRecords']:
-            record = RecordType()
+            record = record_type()
             record.set_all(record_dict)
             created_records.append(record)
 

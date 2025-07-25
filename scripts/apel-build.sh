@@ -111,6 +111,16 @@ mkdir -p "$TEMP_DIR_FOR_SERVER/var/run/apel"
 # apel-lib
 mkdir -p "$TEMP_DIR_FOR_LIB/$PYTHON_ROOT_DIR/$LIB_EXTENSION/apel/"
 
+# Ensure /var/run/apel is created at every reboot by systemd-tmpfiles
+# https://www.man7.org/linux/man-pages/man5/tmpfiles.d.5.html
+mkdir -p "$TEMP_DIR_FOR_SERVER/usr/lib/tmpfiles.d"
+
+# Create a tmpfiles.d *.conf file using `cat` to manage the creation of /var/run/apel directory
+# https://www.uptimia.com/learn/linux-cat-command-useful-examples
+cat > "$TEMP_DIR_FOR_SERVER/usr/lib/tmpfiles.d/apel-server.conf" <<EOF
+d /var/run/apel 0755 root root -
+EOF
+
 APEL_DIR=apel-$VERSION-$ITERATION
 
 # Download and extract source
@@ -240,6 +250,7 @@ FPM_SERVER_PACKAGE="-n apel-server \
     --config-files /etc/apel/loader.cfg \
     --config-files /etc/apel/db.cfg \
     --config-files /etc/apel/auth.cfg \
+    --config-files /usr/lib/tmpfiles.d/apel-server.conf \
     --description \"APEL server package\" "
 
 FPM_LIB_PACKAGE="-n apel-lib \

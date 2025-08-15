@@ -236,7 +236,7 @@ exit 0
  - Various CI and code maintenance changes.
 
  * Wed May 08 2024 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.0.0-1
- - Added codebase compatability with Python3.
+ - Added codebase compatibility with Python3.
  - Removed support for Oracle as a backend database.
  - Added FPM build script.
 
@@ -321,7 +321,7 @@ exit 0
  * Tue Jan 12 2016 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 1.5.1-1
  - Add support for Torque 5.1.2 time duration format.
  - Change dirq call to use absolute path to support versions of dirq >= 1.7.
- - Fix crash when StAR loader encouters a valid XML file with no records in it.
+ - Fix crash when StAR loader encounters a valid XML file with no records in it.
 
  * Tue Jul 14 2015 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 1.5.0-1
  - Added sorting of accounting logs before parsing which makes reading through
@@ -358,7 +358,7 @@ exit 0
  - (No changes from pre-release version.)
 
  * Wed Oct 22 2014 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 1.3.1-0.3.beta1
- - Corrected the handling of muliple FQANs in blah logs so that the role and
+ - Corrected the handling of multiple FQANs in blah logs so that the role and
    group are taken from the first (i.e. primary) FQAN rather than the last.
  - Fixed a crash that occurred when the parser encountered an empty file.
  - Added support for parsing fractional seconds in XML usage records.

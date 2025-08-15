@@ -1,3 +1,8 @@
+ * Fri Aug 15 2025 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.3.1-1
+ - [client] Fixed parsing of HTCondor logs with a trailing empty field.
+ - [client] Fixed unloading of SyncRecords when in dictionary benchmark mode.
+ - Added a systemd-tempfiles config to create /var/run/apel on reboot.
+
  * Fri Jul 04 2025 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.3.0-3
  - Fix issue with dir conflicts in EL8 build.
 

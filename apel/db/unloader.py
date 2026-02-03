@@ -238,7 +238,7 @@ class DbUnloader(object):
         msgs = 0
         records = 0
         for batch in self._db.get_records(record_type, table_name, query=query, records_per_message=self.records_per_message):
-            if record_type == CloudRecord and self._decimal_cpu_count:
+            if record_type == CloudRecord and not self._decimal_cpu_count:
                 for row in batch:
                     row['CpuCount'] = self._to_int_min1(row.get('CpuCount'))
 
@@ -250,8 +250,8 @@ class DbUnloader(object):
             msgs += 1
 
         return msgs, records
-    
-    def _to_int_min1(v):
+
+    def _to_int_min1(self, v):
         '''
         Convert a value to an integer with a special rule:
         - If the numeric value is less than 1 (v < 1), return 1.

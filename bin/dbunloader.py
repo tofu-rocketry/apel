@@ -178,7 +178,8 @@ if __name__ == '__main__':
 
     interval = cp.get('unloader', 'interval')
 
-    unloader = DbUnloader(db, unload_dir, include_vos, exclude_vos, local_jobs, withhold_dns, dict_records, decimal_cpu_count)
+    unloader = DbUnloader(db, unload_dir, include_vos, exclude_vos, local_jobs,
+                          withhold_dns, dict_records, decimal_cpu_count)
 
     unloader.records_per_message = _bounded_records_per_message(cp, log)
 

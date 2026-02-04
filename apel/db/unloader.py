@@ -269,7 +269,8 @@ class DbUnloader(object):
         if v is None:
             return None
 
-        # Convert to float first — it handles ints, floats, and numeric strings ("0.6", "12.0").
+        # Convert to float first — it handles ints, floats,
+        # and numeric strings ("0.6", "12.0").
         try:
             fv = float(v)
         except (ValueError, TypeError):

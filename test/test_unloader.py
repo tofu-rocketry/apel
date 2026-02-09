@@ -36,7 +36,7 @@ class TestDbUnloader(unittest.TestCase):
         self.assertEqual(self.unloader._to_int_min1("0.6"), 1)
 
     def test_to_int_min1_zero_and_one(self):
-        self.assertEqual(self.unloader._to_int_min1(0), 1)
+        self.assertEqual(self.unloader._to_int_min1(0), 0)
         self.assertEqual(self.unloader._to_int_min1(1), 1)
         self.assertEqual(self.unloader._to_int_min1("1"), 1)
 

@@ -257,15 +257,6 @@ class DbUnloader(object):
         - If the numeric value is less than 1 and greater than 0 (0 < v < 1), return 1.
         - For all other numeric values, return int(v).
         - Return None if the value cannot be interpreted as a number.
-
-        Examples:
-            to_int_min1(0)  -> 0
-            to_int_min1("0.6")  -> 1
-            to_int_min1(0.2)    -> 1
-            to_int_min1("12")   -> 12
-            to_int_min1("12.8") -> 12
-            to_int_min1(None)   -> None
-            to_int_min1("N/A")  -> None
         '''
         if v is None:
             return None

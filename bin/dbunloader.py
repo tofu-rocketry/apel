@@ -154,12 +154,12 @@ if __name__ == '__main__':
         local_jobs = False
 
     try:
-        withhold_dns     = cp.getboolean('unloader', 'withhold_dns')
+        withhold_dns = cp.getboolean('unloader', 'withhold_dns')
     except ConfigParser.NoOptionError:
         withhold_dns = False
 
     try:
-        decimal_cpu_count     = cp.getboolean('unloader', 'decimal_cpu_count')
+        decimal_cpu_count = cp.getboolean('unloader', 'decimal_cpu_count')
     except ConfigParser.NoOptionError:
         decimal_cpu_count = False
 

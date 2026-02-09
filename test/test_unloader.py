@@ -26,6 +26,25 @@ class TestDbUnloader(unittest.TestCase):
         self.assertRaises(ApelDbException, self.unloader._write_messages,
                           StorageRecord, 'table', 'query', ur=False)
 
+    def test_to_int_min1_basic(self):
+        self.assertEqual(self.unloader._to_int_min1(5), 5)
+        self.assertEqual(self.unloader._to_int_min1(5.5), 5)
+        self.assertEqual(self.unloader._to_int_min1("5"), 5)
+
+    def test_to_int_min1_fraction_less_than_one(self):
+        self.assertEqual(self.unloader._to_int_min1(0.6), 1)
+        self.assertEqual(self.unloader._to_int_min1("0.6"), 1)
+
+    def test_to_int_min1_zero_and_one(self):
+        self.assertEqual(self.unloader._to_int_min1(0), 1)
+        self.assertEqual(self.unloader._to_int_min1(1), 1)
+        self.assertEqual(self.unloader._to_int_min1("1"), 1)
+
+    def test_to_int_min1_invalid_values(self):
+        self.assertIsNone(self.unloader._to_int_min1("N/A"))
+        self.assertIsNone(self.unloader._to_int_min1(None))
+        self.assertIsNone(self.unloader._to_int_min1([]))
+
 
 class TestFunctions(unittest.TestCase):
     """Test cases for non-class functions."""

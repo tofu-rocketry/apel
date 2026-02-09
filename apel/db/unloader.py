@@ -240,7 +240,7 @@ class DbUnloader(object):
         for batch in self._db.get_records(record_type, table_name, query=query, records_per_message=self.records_per_message):
             if record_type == CloudRecord and not self._decimal_cpu_count:
                 for row in batch:
-                    row._record_content['CpuCount'] = self._to_int_min1(row._record_content.get('CpuCount'))
+                    row.set_field('CpuCount', self._to_int_min1(row.get_field('CpuCount')))
 
             records += len(batch)
             if ur:

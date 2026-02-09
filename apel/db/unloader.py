@@ -240,7 +240,7 @@ class DbUnloader(object):
         for batch in self._db.get_records(record_type, table_name, query=query, records_per_message=self.records_per_message):
             if record_type == CloudRecord and not self._decimal_cpu_count:
                 for row in batch:
-                    row['CpuCount'] = self._to_int_min1(row.get('CpuCount'))
+                    row._record_content['CpuCount'] = self._to_int_min1(row._record_content.get('CpuCount'))
 
             records += len(batch)
             if ur:
@@ -254,11 +254,12 @@ class DbUnloader(object):
     def _to_int_min1(self, v):
         '''
         Convert a value to an integer with a special rule:
-        - If the numeric value is less than 1 (v < 1), return 1.
+        - If the numeric value is less than 1 and greater than 0 (0 < v < 1), return 1.
         - For all other numeric values, return int(v).
         - Return None if the value cannot be interpreted as a number.
 
         Examples:
+            to_int_min1(0)  -> 0
             to_int_min1("0.6")  -> 1
             to_int_min1(0.2)    -> 1
             to_int_min1("12")   -> 12
@@ -277,7 +278,7 @@ class DbUnloader(object):
             return None
 
         # Apply special rule for values in (0, 1).
-        if fv < 1.0:
+        if 0 < fv < 1.0:
             return 1
 
         # Normal integer conversion.

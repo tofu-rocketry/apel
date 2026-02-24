@@ -131,3 +131,14 @@ class CloudRecord(Record):
 
         except (ValueError, OverflowError, OSError):
             raise InvalidRecordException("Cannot parse an integer from StartTime or EndTime.")
+
+
+    def change_field_type(self, field_name, from_type, to_type):
+        type_map = {
+            'float': self._float_fields,
+            'int': self._int_fields
+        }
+
+        if from_type in type_map and field_name in type_map[from_type]:
+            type_map[from_type].remove(field_name)
+            type_map[to_type].append(field_name)

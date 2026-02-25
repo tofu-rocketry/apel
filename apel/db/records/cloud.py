@@ -133,6 +133,19 @@ class CloudRecord(Record):
             raise InvalidRecordException("Cannot parse an integer from StartTime or EndTime.")
 
 
+    '''
+    Move a field from one type category to another.
+
+    This updates the internal type lists by removing `field_name` from the
+    list associated with `from_type` and appending it to the list associated
+    with `to_type`. The method only performs the change if the field is
+    currently present in the source type list.
+    Notes
+    -----
+    - No action is taken if from_type is not a valid key in the internal
+      type mapping or if the field is not present in the source list.
+    - This method assumes that to_type is a valid key in the type map.
+    '''
     def change_field_type(self, field_name, from_type, to_type):
         type_map = {
             'float': self._float_fields,

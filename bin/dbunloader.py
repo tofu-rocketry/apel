@@ -154,9 +154,14 @@ if __name__ == '__main__':
         local_jobs = False
 
     try:
-        withhold_dns     = cp.getboolean('unloader', 'withhold_dns')
+        withhold_dns = cp.getboolean('unloader', 'withhold_dns')
     except ConfigParser.NoOptionError:
         withhold_dns = False
+
+    try:
+        decimal_cpu_count = cp.getboolean('unloader', 'decimal_cpu_count')
+    except ConfigParser.NoOptionError:
+        decimal_cpu_count = False
 
     include_vos      = None
     exclude_vos      = None
@@ -173,7 +178,8 @@ if __name__ == '__main__':
 
     interval = cp.get('unloader', 'interval')
 
-    unloader = DbUnloader(db, unload_dir, include_vos, exclude_vos, local_jobs, withhold_dns, dict_records)
+    unloader = DbUnloader(db, unload_dir, include_vos, exclude_vos, local_jobs,
+                          withhold_dns, dict_records, decimal_cpu_count)
 
     unloader.records_per_message = _bounded_records_per_message(cp, log)
 

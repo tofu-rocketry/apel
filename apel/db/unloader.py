@@ -80,7 +80,7 @@ class DbUnloader(object):
     MAY_WITHHOLD_DNS = [JobRecord, SyncRecord, CloudRecord]
 
     def __init__(self, db, qpath, inc_vos=None, exc_vos=None, local=False, withhold_dns=False,
-                 dict_records=False):
+                 dict_records=False, decimal_cpu_count=False):
         self._db = db
         outpath = os.path.join(qpath, "outgoing")
         self._msgq = QueueSimple(outpath)
@@ -88,6 +88,7 @@ class DbUnloader(object):
         self._exc_vos = exc_vos
         self._local = local
         self._withhold_dns = withhold_dns
+        self._decimal_cpu_count = decimal_cpu_count
         self.records_per_message = 1000
         if dict_records:
             # If dict_records is True, then we only handle the subset of v0.4 records
@@ -237,6 +238,11 @@ class DbUnloader(object):
         msgs = 0
         records = 0
         for batch in self._db.get_records(record_type, table_name, query=query, records_per_message=self.records_per_message):
+            if record_type == CloudRecord and not self._decimal_cpu_count:
+                for row in batch:
+                    row.change_field_type('CpuCount', 'float', 'int')
+                    row.set_field('CpuCount', self._to_int_min1(row.get_field('CpuCount')))
+
             records += len(batch)
             if ur:
                 self._write_xml(batch)
@@ -245,6 +251,30 @@ class DbUnloader(object):
             msgs += 1
 
         return msgs, records
+
+    def _to_int_min1(self, v):
+        '''
+        Convert a value to an integer with a special rule:
+        - If the numeric value is less than 1 and greater than 0 (0 < v < 1), return 1.
+        - For all other numeric values, return int(v).
+        - Return None if the value cannot be interpreted as a number.
+        '''
+        if v is None:
+            return None
+
+        # Convert to float first — it handles ints, floats,
+        # and numeric strings ("0.6", "12.0").
+        try:
+            fv = float(v)
+        except (ValueError, TypeError):
+            return None
+
+        # Apply special rule for values in (0, 1).
+        if 0 < fv < 1.0:
+            return 1
+
+        # Normal integer conversion.
+        return int(fv)
 
     def _write_xml(self, records):
         '''

@@ -4,7 +4,7 @@
 %endif
 
 Name:           apel
-Version:        2.3.1
+Version:        2.4.0
 %define releasenumber 1
 Release:        %{releasenumber}%{?dist}
 Summary:        APEL packages
@@ -199,6 +199,10 @@ exit 0
 # ==============================================================================
 
 %changelog
+ * Wed Mar 11 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.4.0-1
+ - [server] Added support for decimal CPU counts for cloud VM accounting.
+ - Improved compatibility of APEL code with different Python DB modules.
+
  * Fri Aug 15 2025 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.3.1-1
  - [client] Fixed parsing of HTCondor logs with a trailing empty field.
  - [client] Fixed unloading of SyncRecords when in dictionary benchmark mode.

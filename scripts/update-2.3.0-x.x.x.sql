@@ -56,10 +56,10 @@ BEGIN
         -- equal the record create time
         IF(recordCreateTime IS NULL or recordCreateTime='0000-00-00 00:00:00') THEN
             -- Calculate the time of measurement so we can use it later to determine which
-            -- accounting period this incoming record belongs too.
+            -- accounting period this incoming record belongs to.
             SET measurementTimeCalculated = TIMESTAMPADD(SECOND, (IFNULL(suspendDuration, 0) + IFNULL(wallDuration, 0)), startTime);
-            -- We recieve and currently accept messages without a start time
-            -- which causes the mesaurementTimeCalculated to be NULL
+            -- We receive and currently accept messages without a start time
+            -- which causes the measurementTimeCalculated to be NULL
             -- which causes a loader reject on a previously accepted message
             -- so for now, set it to the zero time stamp as is what happens currently
             SET measurementTimeCalculated = IFNULL(measurementTimeCalculated, '00-00-00 00:00:00');
@@ -80,8 +80,8 @@ BEGIN
       VALUES (
         recordCreateTimeNotNull, VMUUID, SiteLookup(site), CloudComputeServiceLookup(cloudComputeService), machineName,
         localUserId, localGroupId, DNLookup(globalUserName), fqan, VOLookup(vo), VOGroupLookup(voGroup),
-        VORoleLookup(voRole), status, startTime, endTime, measurementTimeCalculated, Month(measurementTimeCalculated), Year(measurementTimeCalculated),
-        suspendDuration, wallDuration, cpuDuration, cpuCount,
+        VORoleLookup(voRole), status, startTime, endTime, measurementTimeCalculated, Month(measurementTimeCalculated),
+        Year(measurementTimeCalculated), suspendDuration, wallDuration, cpuDuration, cpuCount,
         networkType, networkInbound, networkOutbound, publicIPCount, memory, disk,
         benchmarkType, benchmark, storageRecordId, imageId, cloudType, DNLookup(publisherDN))
     ;
@@ -112,6 +112,6 @@ BEGIN
         VOGroupLookup(voGroup), VORoleLookup(voRole), status, cloudType, imageId, earliestStartTime, latestStartTime,
         wallDuration, cpuDuration, cpuCount, networkInbound, networkOutbound, memory,
         disk, benchmarkType, benchmark, numberOfVMs, DNLookup(publisherDN)
-        );
+      );
 END //
 DELIMITER ;

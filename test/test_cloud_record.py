@@ -56,7 +56,7 @@ EndTime: 1318848076
 SuspendDuration: NULL
 WallDuration: NULL
 CpuDuration: NULL
-CpuCount: 1.0000
+CpuCount: 1.000
 NetworkType: NULL
 NetworkInbound: 0
 NetworkOutbound: 0

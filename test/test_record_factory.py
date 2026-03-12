@@ -129,7 +129,7 @@ class TestRecordFactory(unittest.TestCase):
         """Test the expected error is raised on messages without a type."""
         unknown_type_json = '{"Key": "Value"}'
 
-        with self.assertRaisesRegexp(RecordFactoryException, 
+        with self.assertRaisesRegexp(RecordFactoryException,
                                      "^Type of JSON message not provided."):
             self._rf.create_records(unknown_type_json)
 

@@ -83,12 +83,12 @@ CREATE TABLE AcceleratorRecords (
   BenchmarkType VARCHAR(255),
   Benchmark DECIMAL(10,3),
   Type VARCHAR(255) NOT NULL,
-  Model VARCHAR(255),
+  Model VARCHAR(255) NOT NULL,
   PublisherDNID INT NOT NULL,
 
   PRIMARY KEY (MeasurementMonth, MeasurementYear,
                AssociatedRecordType, AssociatedRecord,
-               SiteID)
+               SiteID, Model)
 
   -- [?] INDEX
 );
@@ -168,11 +168,11 @@ CREATE TABLE AcceleratorSummaries (
     BenchmarkType VARCHAR(255),
     Benchmark DECIMAL(10,3),
     Type VARCHAR(255) NOT NULL,
-    Model VARCHAR(255),
+    Model VARCHAR(255) NOT NULL,
     NumberOfRecords INT NOT NULL,
     PublisherDNID VARCHAR(255) NOT NULL,
 
-    PRIMARY KEY (Month, Year, AssociatedRecordType, SiteName, Type)
+    PRIMARY KEY (Month, Year, AssociatedRecordType, SiteName, Type, Model)
 );
 
 
@@ -206,7 +206,7 @@ BEGIN
           MeasurementMonth, MeasurementYear,
           AssociatedRecordType,
           GlobalUserName, SiteName,
-          Cores, Type,
+          Cores, Type, Model,
           Benchmark, BenchmarkType
       ORDER BY NULL;
 END //
@@ -299,7 +299,7 @@ CREATE TABLE AcceleratorModelSummaries (
     FQAN VARCHAR(255) NOT NULL,
     GlobalUserName VARCHAR(255),
     Type VARCHAR(255) NOT NULL,
-    Model VARCHAR(255),
+    Model VARCHAR(255) NOT NULL,
     Month INT NOT NULL,
     Year INT NOT NULL,
     Count DECIMAL(10,3) NOT NULL,
@@ -378,8 +378,8 @@ BEGIN
           AND AcceleratorModels.Type = AcceleratorSummaries.Type
         )
     GROUP BY
-      AcceleratorSummaries.Month, AcceleratorSummaries.Year,
-      AcceleratorSummaries.AssociatedRecordType,
+      AcceleratorSummaries.Model, AcceleratorSummaries.Month,
+      AcceleratorSummaries.Year, AcceleratorSummaries.AssociatedRecordType,
       AcceleratorSummaries.GlobalUserName, AcceleratorSummaries.SiteName,
       AcceleratorSummaries.Cores, AcceleratorSummaries.Type,
       AcceleratorSummaries.Benchmark, AcceleratorSummaries.BenchmarkType

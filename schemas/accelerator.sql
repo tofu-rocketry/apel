@@ -1,7 +1,32 @@
 -- This schema adds the tables necessary for Accelerator accounting as a
 -- separate record as part of the wider Cloud Accounting system.
 
+-- -----------------------------------------------------------------------------
+-- Sites
+DROP TABLE IF EXISTS Sites;
+CREATE TABLE Sites (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    INDEX(name)
+) ;
+
+DROP FUNCTION IF EXISTS SiteLookup;
+DELIMITER //
+CREATE FUNCTION SiteLookup(lookup VARCHAR(255)) RETURNS INTEGER DETERMINISTIC
+BEGIN
+    DECLARE result INTEGER;
+    SELECT id FROM Sites WHERE name=lookup INTO result;
+    IF result IS NULL THEN
+        INSERT INTO Sites(name) VALUES (lookup);
+        SET result=LAST_INSERT_ID();
+    END IF;
+RETURN result;
+END //
+DELIMITER ;
+
+
 -- ------------------------------------------------------------------------------
+-- SiteNameLookup (reverse lookup: id -> name)
 DROP FUNCTION IF EXISTS SiteNameLookup;
 DELIMITER //
 CREATE FUNCTION SiteNameLookup(lookup INTEGER) RETURNS VARCHAR(255) DETERMINISTIC
@@ -11,6 +36,33 @@ BEGIN
   RETURN result;
 END //
 DELIMITER ;
+
+
+-- -----------------------------------------------------------------------------
+-- DNs
+DROP TABLE IF EXISTS DNs;
+CREATE TABLE DNs (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+
+  INDEX(name)
+) ;
+
+
+DROP FUNCTION IF EXISTS DNLookup;
+DELIMITER //
+CREATE FUNCTION DNLookup(lookup VARCHAR(255)) RETURNS INTEGER DETERMINISTIC
+BEGIN
+    DECLARE result INTEGER;
+    SELECT id FROM DNs WHERE name=lookup INTO result;
+    IF result IS NULL THEN
+        INSERT INTO DNs(name) VALUES (lookup);
+        SET result=LAST_INSERT_ID();
+    END IF;
+RETURN result;
+END //
+DELIMITER ;
+
 
 DROP TABLE IF EXISTS AcceleratorRecords;
 CREATE TABLE AcceleratorRecords (
@@ -292,38 +344,38 @@ CREATE PROCEDURE GetModelSummaries()
 BEGIN
     REPLACE INTO AcceleratorModelSummaries
     SELECT
-      iris_accelerator.AcceleratorSummaries.SiteName,
-      iris_accelerator.AcceleratorRecords.FQAN,
-      iris_accelerator.AcceleratorSummaries.GlobalUserName,
-      iris_accelerator.AcceleratorSummaries.Type,
-      iris_accelerator.AcceleratorSummaries.Model,
-      iris_accelerator.AcceleratorSummaries.Month,
-      iris_accelerator.AcceleratorSummaries.Year,
-      iris_accelerator.AcceleratorSummaries.Count,
-      iris_accelerator.AcceleratorSummaries.Cores,
-      iris_accelerator.AcceleratorSummaries.AvailableDuration,
-      iris_accelerator.AcceleratorSummaries.ActiveDuration,
-      iris_accelerator.AcceleratorSummaries.AssociatedRecordType,
-      iris_accelerator.AcceleratorSummaries.BenchmarkType,
-      iris_accelerator.AcceleratorSummaries.Benchmark,
-      iris_accelerator.AcceleratorModels.Category
+      AcceleratorSummaries.SiteName,
+      AcceleratorRecords.FQAN,
+      AcceleratorSummaries.GlobalUserName,
+      AcceleratorSummaries.Type,
+      AcceleratorSummaries.Model,
+      AcceleratorSummaries.Month,
+      AcceleratorSummaries.Year,
+      AcceleratorSummaries.Count,
+      AcceleratorSummaries.Cores,
+      AcceleratorSummaries.AvailableDuration,
+      AcceleratorSummaries.ActiveDuration,
+      AcceleratorSummaries.AssociatedRecordType,
+      AcceleratorSummaries.BenchmarkType,
+      AcceleratorSummaries.Benchmark,
+      AcceleratorModels.Category
     FROM
-      iris_accelerator.AcceleratorRecords,
-      iris_accelerator.AcceleratorSummaries,
-      iris_accelerator.AcceleratorModels
+      AcceleratorRecords,
+      AcceleratorSummaries,
+      AcceleratorModels
     WHERE
-      iris_accelerator.AcceleratorRecords.GlobalUserName = iris_accelerator.AcceleratorSummaries.GlobalUserName
-      AND SiteNameLookup(iris_accelerator.AcceleratorRecords.SiteID) = iris_accelerator.AcceleratorSummaries.SiteName
-      AND iris_accelerator.AcceleratorRecords.Type = iris_accelerator.AcceleratorSummaries.Type
-      AND iris_accelerator.AcceleratorRecords.Model = iris_accelerator.AcceleratorSummaries.Model
-      AND iris_accelerator.AcceleratorModels.Date = (
-        SELECT MAX(iris_accelerator.AcceleratorModels.Date)
+      AcceleratorRecords.GlobalUserName = AcceleratorSummaries.GlobalUserName
+      AND SiteNameLookup(AcceleratorRecords.SiteID) = AcceleratorSummaries.SiteName
+      AND AcceleratorRecords.Type = AcceleratorSummaries.Type
+      AND AcceleratorRecords.Model = AcceleratorSummaries.Model
+      AND AcceleratorModels.Date = (
+        SELECT MAX(AcceleratorModels.Date)
         FROM
-          iris_accelerator.AcceleratorModels
+          AcceleratorModels
         WHERE
-          iris_accelerator.AcceleratorModels.Date <= str_to_date(CONCAT_WS('-', iris_accelerator.AcceleratorSummaries.Year, LPAD(iris_accelerator.AcceleratorSummaries.Month, 2, 0)), '%Y-%m-01 00:00:00')
-          AND iris_accelerator.AcceleratorSummaries.Model = iris_accelerator.AcceleratorSummaries.Model
-          AND iris_accelerator.AcceleratorModels.Type = iris_accelerator.AcceleratorSummaries.Type
+          AcceleratorModels.Date <= str_to_date(CONCAT_WS('-', AcceleratorSummaries.Year, LPAD(AcceleratorSummaries.Month, 2, 0)), '%Y-%m-01 00:00:00')
+          AND AcceleratorSummaries.Model = AcceleratorSummaries.Model
+          AND AcceleratorModels.Type = AcceleratorSummaries.Type
         )
     GROUP BY
       MeasurementMonth, MeasurementYear,

@@ -374,15 +374,15 @@ BEGIN
           AcceleratorModels
         WHERE
           AcceleratorModels.Date <= str_to_date(CONCAT_WS('-', AcceleratorSummaries.Year, LPAD(AcceleratorSummaries.Month, 2, 0)), '%Y-%m-01 00:00:00')
-          AND AcceleratorSummaries.Model = AcceleratorSummaries.Model
+          AND AcceleratorModels.Model = AcceleratorSummaries.Model
           AND AcceleratorModels.Type = AcceleratorSummaries.Type
         )
     GROUP BY
-      MeasurementMonth, MeasurementYear,
-      AssociatedRecordType,
-      GlobalUserName, SiteName,
-      Cores, Type,
-      Benchmark, BenchmarkType
+      AcceleratorSummaries.Month, AcceleratorSummaries.Year,
+      AcceleratorSummaries.AssociatedRecordType,
+      AcceleratorSummaries.GlobalUserName, AcceleratorSummaries.SiteName,
+      AcceleratorSummaries.Cores, AcceleratorSummaries.Type,
+      AcceleratorSummaries.Benchmark, AcceleratorSummaries.BenchmarkType
     ORDER BY NULL;
 END
 //

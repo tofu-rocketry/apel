@@ -1,5 +1,3 @@
-#!/bin/env python2.7
-
 import unittest
 
 from apel.db.records import AcceleratorSummary

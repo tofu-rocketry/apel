@@ -24,7 +24,7 @@ class AcceleratorSummaryRecordTest(unittest.TestCase):
                 BenchmarkType: Site FAQs
                 Benchmark: 326.000
                 Model: HS About
-                Type: Accelerator
+                Type: GPU
                 NumberOfRecords: 1000
                 '''
 
@@ -41,7 +41,7 @@ class AcceleratorSummaryRecordTest(unittest.TestCase):
                 'BenchmarkType': 'Site FAQs',
                 'Benchmark': 326.000,
                 'Model': 'HS About',
-                'Type': 'Accelerator',
+                'Type': 'GPU',
                 'NumberOfRecords': 1000,
         }
 
@@ -67,13 +67,14 @@ class AcceleratorSummaryRecordTest(unittest.TestCase):
         record.set_field('SiteName', 'MySite')
         record.set_field("Count", 100.01)
         record.set_field("AvailableDuration", 1000)
-        record.set_field("Type", 'Accelerator')
+        record.set_field("Type", 'GPU')
         record.set_field("NumberOfRecords", 10)
 
         try:
             record._check_fields()
         except Exception as e:
             self.fail('_check_fields method failed: %s [%s]' % (e, type(e)))
+
 
 if __name__ == '__main__':
     unittest.main()

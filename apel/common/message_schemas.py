@@ -214,7 +214,7 @@ ACCELERATOR_SUMMARY_MSG_SCHEMA = {
             "$id": "#/properties/Type",
             "title": "JSON message type",
             "type": "string",
-            "const": "APEL-accelerator-message"
+            "const": "APEL-accelerator-summary-message"
         },
         "Version": {
             "$id": "#/properties/Version",
@@ -360,7 +360,7 @@ ACCELERATOR_SUMMARY_MSG_SCHEMA = {
                         "description": "The general descriptor for accelerator",
                         "type": "string",
                         "enum": [
-                            "Accelerator",
+                            "GPU",
                             "FPGA",
                             "Other"
                         ]

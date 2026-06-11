@@ -65,6 +65,7 @@ def main():
                     'schemas/server.sql',
                     'schemas/server-extra.sql',
                     'schemas/cloud.sql',
+                    'schemas/accelerator.sql',
                     'schemas/storage.sql']
 
     # Wildcarding for update scripts (like we do in the spec file)
@@ -80,7 +81,8 @@ def main():
     log_rotate_files = ['scripts/apel-client']
 
     # Python 3.x dependencies
-    _install_requires = ['mysqlclient', 'iso8601', 'python-ldap', 'dirq', 'future']
+    _install_requires = ['mysqlclient', 'iso8601',
+                         'python-ldap', 'dirq', 'future', 'jsonschema']
     # Python 2.x dependencies
     if sys.version_info < (3,):
         _install_requires = ['MySQL-python'] + _install_requires[1:]

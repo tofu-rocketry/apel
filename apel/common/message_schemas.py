@@ -44,12 +44,19 @@ ACCELERATOR_MSG_SCHEMA = {
                     "MeasurementMonth",
                     "MeasurementYear",
                     "AssociatedRecordType",
-                    "AssociatedRecord",
                     "FQAN",
                     "SiteName",
                     "Count",
                     "AvailableDuration",
                     "Type",
+                ],
+                # The associated record identifier is mandatory but its name is
+                # in transition: cASO <= 0.1 sends it as "AccUUID", while the
+                # GPU Usage Record spec (and cASO from #190/#191 onwards) calls
+                # it "AssociatedRecord".
+                "anyOf": [
+                    {"required": ["AssociatedRecord"]},
+                    {"required": ["AccUUID"]},
                 ],
                 "properties": {
                     "MeasurementMonth": {
@@ -78,6 +85,16 @@ ACCELERATOR_MSG_SCHEMA = {
                     },
                     "AssociatedRecord": {
                         "$id": "#/properties/UsageRecords/items/properties/AssociatedRecord",
+                        "type": "string",
+                        "examples": [
+                            "a-fake-vmuuid"
+                        ]
+                    },
+                    "AccUUID": {
+                        "$id": "#/properties/UsageRecords/items/properties/AccUUID",
+                        "description": "Legacy name for AssociatedRecord sent by "
+                                       "cASO <= 0.1; mapped to AssociatedRecord "
+                                       "on load (see cASO #190/#191)",
                         "type": "string",
                         "examples": [
                             "a-fake-vmuuid"

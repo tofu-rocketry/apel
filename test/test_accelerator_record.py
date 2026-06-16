@@ -23,7 +23,7 @@ class AcceleratorRecordTest(unittest.TestCase):
                 ActiveDuration: 30739
                 BenchmarkType: Site FAQs
                 Benchmark: 326.000
-                Type: GPU
+                Type: Accelerator
                 Model: HS About
                 '''
 
@@ -41,7 +41,7 @@ class AcceleratorRecordTest(unittest.TestCase):
                 'ActiveDuration': 30739,
                 'BenchmarkType': 'Site FAQs',
                 'Benchmark': 326.000,
-                'Type': 'GPU',
+                'Type': 'Accelerator',
                 'Model': 'HS About',
         }
 
@@ -70,13 +70,36 @@ class AcceleratorRecordTest(unittest.TestCase):
         record.set_field("FQAN", 'fqan2')
         record.set_field("Count", 100.01)
         record.set_field("AvailableDuration", 1000)
-        record.set_field("Type", 'GPU')
+        record.set_field("Type", 'Accelerator')
 
         try:
             record._check_fields()
         except Exception as e:
             self.fail('_check_fields method failed: %s [%s]' % (e, type(e)))
 
+    def test_accuuid_mapped_to_associated_record(self):
+        # cASO <= 0.1 sends the associated VM UUID as AccUUID; it should be
+        # stored under the spec field AssociatedRecord and not retained as AccUUID.
+        record = AcceleratorRecord()
+        record.set_all({
+            'MeasurementMonth': 6,
+            'MeasurementYear': 2021,
+            'AssociatedRecordType': 'cloud',
+            'AccUUID': 'UUIDx',
+            'FQAN': 'fqan1',
+            'SiteName': 'MySite',
+            'Count': 1,
+            'AvailableDuration': 1000,
+            'Type': 'GPU',
+            'Model': 'NVIDIA Tesla V100',
+        })
+        self.assertEqual(record._record_content['AssociatedRecord'], 'UUIDx')
+        self.assertNotIn('AccUUID', record._record_content)
+
+        try:
+            record.get_db_tuple()
+        except Exception as e:
+            self.fail('get_db_tuple failed after AccUUID mapping: %s [%s]' % (e, type(e)))
 
 if __name__ == '__main__':
     unittest.main()

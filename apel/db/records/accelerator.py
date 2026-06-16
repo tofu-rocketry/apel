@@ -77,6 +77,23 @@ class AcceleratorRecord(Record):
         # All allowed fields.
         self._all_fields = self._db_fields
 
+    def set_field(self, key, value):
+        """Set one field, mapping the legacy AccUUID name onto AssociatedRecord.
+
+        cASO <= 0.1 sends the associated VM UUID as "AccUUID"; the GPU Usage
+        Record spec (and cASO from #190/#191 onwards) calls this field
+        "AssociatedRecord". An explicit AssociatedRecord always
+        wins, so this keeps working once senders switch to the spec name and
+        regardless of field order in the message.
+        """
+        if key == "AccUUID":
+            key = "AssociatedRecord"
+            if key in self._record_content:
+                # Spec field already populated; ignore the legacy duplicate.
+                return
+
+        Record.set_field(self, key, value)
+
     def _check_fields(self):
         """
         Add extra checks to those made in every record.

@@ -17,6 +17,7 @@
 '''
 
 from future.builtins import object
+from apel import __version__
 
 import logging
 
@@ -66,3 +67,9 @@ class Parser(object):
             pass
 
         return False
+    
+    def get_client_version():
+        '''
+        Method to get APEL client version
+        '''
+        return 'APEL/%s.%s.%s' % __version__

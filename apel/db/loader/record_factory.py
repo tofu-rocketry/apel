@@ -23,8 +23,8 @@ import logging
 
 import jsonschema
 
-from apel.common.message_schemas import ACCELERATOR_MSG_SCHEMA
-from apel.common.message_schemas import ACCELERATOR_SUMMARY_MSG_SCHEMA
+from apel.common.json_schemas import ACCELERATOR_MSG_SCHEMA
+from apel.common.json_schemas import ACCELERATOR_SUMMARY_MSG_SCHEMA
 from apel.db.records.job import JobRecord, JobRecord04
 from apel.db.records.summary import SummaryRecord, SummaryRecord04
 from apel.db.records.normalised_summary import NormalisedSummaryRecord, NormalisedSummaryRecord04

@@ -22,7 +22,7 @@ class AcceleratorSummary(Record):
     """Class to represent one Accelerator summary record."""
     def __init__(self):
         """Provide the necessary lists containing message information."""
-        Record.__init__(self)
+        super().__init__()
 
         # This specifies the order of entries to match the database schema
         self._db_fields = [
@@ -75,11 +75,3 @@ class AcceleratorSummary(Record):
 
         # All allowed fields.
         self._all_fields = self._db_fields
-
-    def _check_fields(self):
-        """
-        Add extra checks to those made in every record.
-        Also populates fields that are extracted from other fields.
-        """
-        # First, call the parent's version.
-        Record._check_fields(self)

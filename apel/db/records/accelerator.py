@@ -22,7 +22,7 @@ class AcceleratorRecord(Record):
     """Class to represent one Accelerator record."""
     def __init__(self):
         """Provide the necessary lists containing message information."""
-        Record.__init__(self)
+        super().__init__()
 
         # This specifies the order of entries to match the database schema
         self._db_fields = [
@@ -92,12 +92,4 @@ class AcceleratorRecord(Record):
                 # Spec field already populated; ignore the legacy duplicate.
                 return
 
-        Record.set_field(self, key, value)
-
-    def _check_fields(self):
-        """
-        Add extra checks to those made in every record.
-        Also populates fields that are extracted from other fields.
-        """
-        # First, call the parent's version.
-        Record._check_fields(self)
+        super().set_field(key, value)

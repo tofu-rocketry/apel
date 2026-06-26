@@ -4,9 +4,7 @@ from apel.db.records import AcceleratorSummary
 
 
 class AcceleratorSummaryRecordTest(unittest.TestCase):
-    """
-    Test case for AcceleratorSummary
-    """
+    """Test case for AcceleratorSummary."""
 
     def setUp(self):
         self._msg1 = '''
@@ -47,17 +45,19 @@ class AcceleratorSummaryRecordTest(unittest.TestCase):
         self.cases[self._msg1] = self._values1
 
     def test_load_from_msg(self):
-        for msg in self.cases.keys():
+        """Check that loading from a message works correctly."""
+        for msg, values in self.cases.items():
 
-            acceleratorr = AcceleratorSummary()
-            acceleratorr.load_from_msg(msg)
+            accelerator = AcceleratorSummary()
+            accelerator.load_from_msg(msg)
 
-            cont = acceleratorr._record_content
+            cont = accelerator._record_content
 
-            for key in self.cases[msg].keys():
-                self.assertEqual(cont[key], self.cases[msg][key], "%s != %s for key %s" % (cont[key], self.cases[msg][key], key))
+            for field, value in values.items():
+                self.assertEqual(cont[field], value, "%s != %s for key %s" % (cont[field], value, field))
 
     def test_mandatory_fields(self):
+        """Check that the set_field method works for mandatory fields."""
         record = AcceleratorSummary()
         record.set_field("Month", '01')
         record.set_field("Year", '2021')

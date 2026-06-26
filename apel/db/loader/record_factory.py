@@ -18,8 +18,6 @@
 Module containing the RecordFactory class.
 '''
 
-from future.builtins import object
-
 import json
 import logging
 

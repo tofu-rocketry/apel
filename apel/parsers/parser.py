@@ -67,9 +67,9 @@ class Parser(object):
             pass
 
         return False
-    
+
     def get_client_version(self):
         '''
         Method to get APEL client version
         '''
-        return 'APEL/%s.%s.%s' % __version__
+        return f"APEL/{'.'.join(map(str, __version__))}"

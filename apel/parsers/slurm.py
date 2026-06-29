@@ -77,7 +77,8 @@ class SlurmParser(Parser):
 
         mapping = {'Site'            : lambda x: self.site_name,
                    'MachineName'     : lambda x: self.machine_name,
-                   'Infrastructure'  : lambda x: self.get_client_version() + "-CREAM-SLURM",
+                   'Infrastructure'  : lambda *args: self.get_client_version() +
+                                                          "-CREAM-SLURM",
                    'JobName'         : lambda x: x[0],
                    'LocalUserID'     : lambda x: x[2],
                    'LocalUserGroup'  : lambda x: x[3],

@@ -141,7 +141,8 @@ class SGEParser(Parser):
                   'CpuDuration'     : lambda x: int(round(float(x[36]))*self._get_cpu_multiplier(x[1])),
                   'StartTime'       : lambda x: int(round(float(x[9])/divisor)),
                   'StopTime'        : lambda x: int(round(float(x[10])/divisor)),
-                  'Infrastructure'  : lambda x: self.get_client_version() + "-CREAM-SGE",
+                  'Infrastructure'  : lambda *args: self.get_client_version() +
+                                                         "-CREAM-SGE",
                   'MachineName'     : lambda x: self.machine_name,
                   'MemoryReal'      : lambda x: int(float(x[37])*1024*1024),  # is this correct?
                   'MemoryVirtual'   : lambda x: int(float(x[42])),

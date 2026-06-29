@@ -112,7 +112,8 @@ class LSFParser(Parser):
                    'CpuDuration'   : lambda x: int(round(host_factor * (float(x[28+offset]) + float(x[29+offset])))),
                    'StartTime'     : lambda x: int(x[10]),
                    'StopTime'      : lambda x: int(x[2]),
-                   'Infrastructure': lambda x: self.get_client_version() + "-CREAM-LSF",
+                   'Infrastructure': lambda *args: self.get_client_version() +
+                                                         "-CREAM-LSF",
                    'Queue'         : lambda x: x[12],
                    'MachineName'   : lambda x: self.machine_name,
                    'MemoryReal'    : lambda x: int(x[54+offset]) > 0 and int(x[54+offset]) or 0,

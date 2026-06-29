@@ -109,7 +109,7 @@ class ParserPBSTest(unittest.TestCase):
             cont = record._record_content
 
             self.assertEqual(cont['Site'], 'testSite')
-            self.assertEqual(cont['Infrastructure'], 'APEL-CREAM-PBS')
+            self.assertEqual(cont['Infrastructure'], self.parser.get_client_version() + '-CREAM-PBS')
             self.assertEqual(cont['MachineName'], 'testHost')
 
             for key in list(cases[line].keys()):

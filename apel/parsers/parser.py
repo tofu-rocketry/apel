@@ -68,7 +68,7 @@ class Parser(object):
 
         return False
     
-    def get_client_version():
+    def get_client_version(self):
         '''
         Method to get APEL client version
         '''

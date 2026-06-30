@@ -72,4 +72,4 @@ class Parser(object):
         '''
         Method to get APEL client version
         '''
-        return f"APEL/{'.'.join(map(str, __version__))}"
+        return 'APEL/{0}.{1}.{2}".format(*__version__)'

@@ -51,6 +51,21 @@ class RecordTest(unittest.TestCase):
                 print("Value Error not raised for '%s'" % value)
                 raise
 
+    def test_change_field_type(self):
+        """Basic test of field type changing."""
+        record = Record()
+        record._int_fields = ['IntField', 'IntToFloatField']
+        record._float_fields = ['FloatField', 'FloatToIntField']
+
+        self.assertEqual(record._int_fields, ['IntField', 'IntToFloatField'])
+        self.assertEqual(record._float_fields, ['FloatField', 'FloatToIntField'])
+
+        record.change_field_type('IntToFloatField', 'int', 'float')
+        record.change_field_type('FloatToIntField', 'float', 'int')
+
+        self.assertEqual(record._int_fields, ['IntField', 'FloatToIntField'])
+        self.assertEqual(record._float_fields, ['FloatField', 'IntToFloatField'])
+
 
 if __name__ == '__main__':
     unittest.main()

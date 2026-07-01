@@ -4,7 +4,7 @@
 %endif
 
 Name:           apel
-Version:        2.5.0
+Version:        2.5.1
 %define releasenumber 1
 Release:        %{releasenumber}%{?dist}
 Summary:        APEL packages
@@ -199,6 +199,10 @@ exit 0
 # ==============================================================================
 
 %changelog
+ * Wed Jul 01 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.5.1-1
+ - [server] Fixed an issue with setting the config to select whether decimal CPU counts
+   are unloaded for summarised cloud VM records.
+
  * Thu May 14 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.5.0-1
  - [server] Added support for sites sending an InfrastructureDescription in summaries.
 

@@ -25,7 +25,7 @@ The project is written in Python.
 %package lib
 Summary:        Libraries required for Apel Client, Server and Parsers
 Group:          Development/Languages
-Requires:       MySQL-python, python-ldap < 3.4.0 , python-iso8601, python-dirq, python-future
+Requires:       MySQL-python, python-ldap < 3.4.0 , python-iso8601, python-dirq, python-future, python3-jsonschema
 Requires(pre):  shadow-utils
 
 %description lib
@@ -107,6 +107,7 @@ cp schemas/client.sql %{buildroot}%_datadir/apel/
 cp schemas/server.sql %{buildroot}%_datadir/apel/
 cp schemas/server-extra.sql %{buildroot}%_datadir/apel/
 cp schemas/cloud.sql %{buildroot}%_datadir/apel/
+cp schemas/accelerator.sql %{buildroot}%_datadir/apel/
 cp schemas/storage.sql %{buildroot}%_datadir/apel/
 
 # All update scripts matched by wildcard
@@ -173,6 +174,7 @@ exit 0
 %_datadir/apel/server.sql
 %_datadir/apel/server-extra.sql
 %_datadir/apel/cloud.sql
+%_datadir/apel/accelerator.sql
 %_datadir/apel/storage.sql
 # Include all update scripts by wildcard matching
 %_datadir/apel/update-*.sql

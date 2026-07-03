@@ -35,7 +35,7 @@ class BaseParserTest(unittest.TestCase):
 
         parts = version.removeprefix("APEL/").split(".")
         assert len(parts) == 3
-        assert all(part.isdigit() for part in parts)   
+        assert all(part.isdigit() for part in parts)
 
 
 class AllParsersRecognizeTest(unittest.TestCase):

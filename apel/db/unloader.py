@@ -86,7 +86,8 @@ class DbUnloader(object):
     MAY_WITHHOLD_DNS = [JobRecord, SyncRecord, CloudRecord]
 
     def __init__(self, db, qpath, inc_vos=None, exc_vos=None, local=False, withhold_dns=False,
-                 dict_records=False, decimal_cpu_count=False):
+                 dict_records=False, decimal_cpu_count=False,
+                 include_infrastructure_description=False):
         self._db = db
         outpath = os.path.join(qpath, "outgoing")
         self._msgq = QueueSimple(outpath)
@@ -96,7 +97,7 @@ class DbUnloader(object):
         self._withhold_dns = withhold_dns
         self._decimal_cpu_count = decimal_cpu_count
         self.records_per_message = 1000
-        self.include_infrastructure_description = False
+        self.include_infrastructure_description = include_infrastructure_description
         if dict_records:
             # If dict_records is True, then we only handle the subset of v0.4 records
             self.RECORD_TYPES = self.DICT_RECORD_TYPES

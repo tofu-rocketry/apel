@@ -1,11 +1,12 @@
 -- ============================================================================
 -- APEL UPDATE SCRIPT FOR CLIENT SCHEMA
--- APEL version 2.5.0 databases of the following types to 2.5.1:
--- Run this script against the ??
+-- APEL version 2.5.0 databases of the following types to x.x.x:
+-- Run this script against the grid client database
 --
 -- This script will:
 --  - Add new column InfrastructureDescription to:
 --      SuperSummaries
+--      VSuperSummaries
 --  - Recreate procedures:
 --      SummariseJobs
 -- ============================================================================
@@ -17,6 +18,47 @@ ALTER TABLE SuperSummaries
   ADD InfrastructureDescription VARCHAR(100)
   AFTER InfrastructureType;
 
+-- -----------------------------
+-- Add column InfrastructureDescription
+-- -----------------------------
+-- Update view on SuperSummaries
+DROP VIEW IF EXISTS VSuperSummaries;
+CREATE VIEW VSuperSummaries AS
+    SELECT
+        UpdateTime,
+        site.name Site,
+        Month,
+        Year,
+        userdn.name GlobalUserName,
+        vos.name VO,
+        vogroup.name VOGroup,
+        vorole.name VORole,
+        submithost.name SubmitHost,
+        InfrastructureType,
+        InfrastructureDescription,
+        ServiceLevelType,
+        ServiceLevel,
+        NodeCount,
+        Processors,
+        EarliestEndTime,
+        LatestEndTime,
+        WallDuration,
+        CpuDuration,
+        NumberOfJobs
+    FROM SuperSummaries,
+         Sites site,
+         DNs userdn,
+         VORoles vorole,
+         VOs vos,
+         VOGroups vogroup,
+         SubmitHosts submithost
+    WHERE
+        SiteID = site.id
+        AND GlobalUserNameID = userdn.id
+        AND VORoleID = vorole.id
+        AND VOID = vos.id
+        AND VOGroupID = vogroup.id
+        AND SubmitHostID = submithost.id;
 
 -- -----------------------------
 -- Procedures

@@ -31,11 +31,12 @@ class BaseParserTest(unittest.TestCase):
         """
         version = apel.parsers.Parser.get_client_version(apel.parsers.Parser)
 
-        assert version.startswith("APEL/")
+        self.assertTrue(version.startswith("APEL/"))
 
         parts = version.removeprefix("APEL/").split(".")
-        assert len(parts) == 3
-        assert all(part.isdigit() for part in parts)
+        self.assertEqual(len(parts), 3)
+        self.assertTrue(all(part.isdigit() for part in parts),
+                        f"Version contains non-numeric components: {version}")
 
 
 class AllParsersRecognizeTest(unittest.TestCase):

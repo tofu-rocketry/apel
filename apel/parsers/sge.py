@@ -156,10 +156,12 @@ class SGEParser(Parser):
         for key in mapping:
             data[key] = mapping[key](values)
 
-        assert data['CpuDuration'] >= 0, 'Negative CpuDuration value'
-        assert data['WallDuration'] >= 0, 'Negative WallDuration value'
-        assert data['StopTime'] > 0, 'Zero epoch time for field StopTime'
-
+        if data['CpuDuration'] < 0:
+            raise ValueError("Negative CpuDuration value: %s" % data['CpuDuration'])
+        if data['WallDuration'] < 0:
+            raise ValueError("Negative WallDuration value: %s" % data['WallDuration'])
+        if data['StopTime'] <= 0:
+            raise ValueError("Zero epoch time for field StopTime")
 
         record.set_all(data)
 

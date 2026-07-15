@@ -108,7 +108,8 @@ class ParserSlurmTest(unittest.TestCase):
 
             self.assertEqual(cont['Site'], 'testSite')
             self.assertEqual(cont['MachineName'], 'testHost')
-            self.assertEqual(cont['Infrastructure'], 'APEL-CREAM-SLURM')
+            self.assertEqual(cont['Infrastructure'], self.parser.get_client_version() +
+                                                                 '-CREAM-SLURM')
 
             # Queue is a special case as it gets deleted on parsing if empty.
             if 'Queue' not in cont:

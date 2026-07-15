@@ -104,7 +104,8 @@ class ParserLSFTest(unittest.TestCase):
 
             self.assertEqual(cont['Site'], 'testSite')
             self.assertEqual(cont['MachineName'], 'testHost')
-            self.assertEqual(cont['Infrastructure'], 'APEL-CREAM-LSF')
+            self.assertEqual(cont['Infrastructure'], self.parser.get_client_version() +
+                                                                 '-CREAM-LSF')
 
             for field in list(cases[line].keys()):
                 self.assertIn(field, cont, "Field '%s' not in record: %s" % (field, cont))

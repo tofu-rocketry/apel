@@ -24,6 +24,20 @@ class BaseParserTest(unittest.TestCase):
         """Check that using recognize with the base parser gives False."""
         self.assertFalse(self.parser.recognize('line'))
 
+    def test_get_client_version_format(self):
+        """
+        Verify that get_client_version() returns a version string in the
+        expected APEL format: APEL/<major>.<minor>.<patch>
+        """
+        version = apel.parsers.Parser.get_client_version(apel.parsers.Parser)
+
+        self.assertTrue(version.startswith("APEL/"))
+
+        parts = version.removeprefix("APEL/").split(".")
+        self.assertEqual(len(parts), 3)
+        self.assertTrue(all(part.isdigit() for part in parts),
+                        f"Version contains non-numeric components: {version}")
+
 
 class AllParsersRecognizeTest(unittest.TestCase):
     """Test cases for the parser recognize method."""

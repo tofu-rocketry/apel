@@ -153,7 +153,7 @@ cp "$SOURCE_DIR/$APEL_DIR/bin/dbunloader.py"  "$TEMP_DIR_FOR_SERVER/usr/bin/apel
 cp "$SOURCE_DIR/$APEL_DIR/bin/summariser.py"  "$TEMP_DIR_FOR_SERVER/usr/bin/apelsummariser"
 cp "$SOURCE_DIR/$APEL_DIR/bin/retrieve_dns.py"  "$TEMP_DIR_FOR_SERVER/usr/bin/apelauth"
 cp "$SOURCE_DIR/$APEL_DIR/conf/"{auth,db,loader,summariser,unloader}.cfg  "$TEMP_DIR_FOR_SERVER/etc/apel/"
-cp "$SOURCE_DIR/$APEL_DIR/schemas/"{cloud,server-extra,server,storage}.sql  "$TEMP_DIR_FOR_SERVER/usr/share/apel/"
+cp "$SOURCE_DIR/$APEL_DIR/schemas/"{cloud,accelerator,server-extra,server,storage}.sql  "$TEMP_DIR_FOR_SERVER/usr/share/apel/"
 cp "$SOURCE_DIR/$APEL_DIR/scripts/msg_status.py"  "$TEMP_DIR_FOR_SERVER/usr/share/apel/"
 cp "$SOURCE_DIR/$APEL_DIR/scripts/update-"*  "$TEMP_DIR_FOR_SERVER/usr/share/apel/"
 
@@ -172,7 +172,8 @@ if [[ ${PY_NUM:0:1} == "3" ]]; then
         --depends python3-dirq \
         --depends python3-iso8601 \
         --depends python3-mysqlclient \
-        --depends python3-future "
+        --depends python3-future \
+        --depends python3-jsonschema "
     FPM_PYTHON_SERVER_DEPS="--depends python3-daemon"
 elif [[ ${PY_NUM:0:1} == "2" ]]; then
     echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."

@@ -1,5 +1,5 @@
-'''
-   Copyright (C) 2012 STFC
+"""
+   Copyright (C) 2023 STFC
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -13,6 +13,18 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 
-   @author Konrad Jopek, Will Rogers
-'''
-__version__ = (2, 6, 0)
+Helper methods to perform JSON operations.
+"""
+
+JSON_MSG_BOILERPLATE = """{
+    "Type": "%s",
+    "Version": "%s",
+    "UsageRecords": %s
+}"""
+
+
+def to_message(message_type, version, *usage_records):
+    """ Generate JSON message format """
+    return (
+        JSON_MSG_BOILERPLATE % (message_type, version, list(usage_records))
+    ).replace("'", '"')

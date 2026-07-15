@@ -365,6 +365,26 @@ class ParserSGETest(unittest.TestCase):
         self.assertEqual(record._record_content['Processors'], 0,
                          "Processors not zero for non-mpi parser")
 
+    def test_negative_values(self):
+        """Check that negative values for durations and StopTime raise a ValueError"""
+        lines = (
+            'dteam:testce.test:dteam:dteam041:STDIN:43:sge:19:1200093286:1200093294:'
+            '1200093295:0:0:-1:0:0:0.000000:0:0:0:0:46206:0:0:0.000000:0:0:0:0:337:'
+            '257:NONE:defaultdepartment:NONE:1:0:0.090000:0.000213:0.000000:'
+            '-U dteam -q dteam:0.000000:NONE:30171136.000000',
+            'dteam:testce.test:dteam:dteam041:STDIN:43:sge:19:1200093286:1200093294:'
+            '1200093295:0:0:1:0:0:0.000000:0:0:0:0:46206:0:0:0.000000:0:0:0:0:337:'
+            '257:NONE:defaultdepartment:NONE:1:0:-0.900000:0.000213:0.000000:'
+            '-U dteam -q dteam:0.000000:NONE:30171136.000000',
+            'dteam:testce.test:dteam:dteam041:STDIN:43:sge:19:1200093286:1200093294:'
+            '-1200093295:0:0:1:0:0:0.000000:0:0:0:0:46206:0:0:0.000000:0:0:0:0:337:'
+            '257:NONE:defaultdepartment:NONE:1:0:0.090000:0.000213:0.000000:'
+            '-U dteam -q dteam:0.000000:NONE:30171136.000000'
+        )
+        parser = apel.parsers.SGEParser('testSite', 'testHost', False)
+        for line in lines:
+            self.assertRaises(ValueError, parser.parse, line)
+
 
 if __name__ == '__main__':
     unittest.main()

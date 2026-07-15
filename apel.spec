@@ -201,6 +201,9 @@ exit 0
 # ==============================================================================
 
 %changelog
+  * Wed Jul 15 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.6.0-1
+ - [server] Added support for accelerator (GPU) accounting records to cloud accounting.
+
  * Wed Jul 01 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.5.1-1
  - [server] Fixed an issue with setting the config to select whether decimal CPU counts
    are unloaded for summarised cloud VM records.

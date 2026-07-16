@@ -36,11 +36,7 @@ import re
 import gzip
 import bz2
 from argparse import ArgumentParser
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    import configparser as ConfigParser
-except ImportError:
-    import ConfigParser
+import configparser
 
 from apel import __version__
 from apel.db import ApelDb, ApelDbException
@@ -274,12 +270,12 @@ def handle_parsing(log_type, apel_db, cp):
         reparse = cp.getboolean(section, 'reparse')
         if reparse:
             log.warning('Parser will reparse all logfiles found.')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         reparse = False
 
     try:
         mpi = cp.getboolean(section, 'parallel')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         mpi = False
 
     try:
@@ -293,13 +289,13 @@ def handle_parsing(log_type, apel_db, cp):
     if log_type == 'LSF':
         try:
             parser.set_scaling(cp.getboolean('batch', 'scale_host_factor'))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             log.warning("Option 'scale_host_factor' not found in section 'batch"
                         "'. Will default to 'false'.")
     elif log_type == 'SGE':
         try:
             parser.set_ms_timestamps(cp.getboolean('batch', 'ge_ms_timestamps'))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             log.warning("Option 'ge_ms_timestamps' not found in section 'batch'"
                         " . Will default to 'false'.")
 
@@ -307,10 +303,10 @@ def handle_parsing(log_type, apel_db, cp):
     try:
         prefix = cp.get(section, 'filename_prefix')
         expr = re.compile('^' + prefix + '.*')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         try:
             expr = re.compile(cp.get(section, 'filename_pattern'))
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             log.warning('No pattern specified for %s log file names.', log_type)
             log.warning('Parser will try to parse all files in directory')
             expr = re.compile('(.*)')
@@ -360,7 +356,7 @@ def main():
 
     # Read configuration from file
     try:
-        cp = ConfigParser.ConfigParser()
+        cp = configparser.ConfigParser()
         cp.read(options.config)
     except Exception as e:
         sys.stderr.write(str(e))
@@ -374,7 +370,7 @@ def main():
             cp.get('logging', 'level'),
             cp.getboolean('logging', 'console')
         )
-    except (ConfigParser.Error, ValueError, IOError) as err:
+    except (configparser.Error, ValueError, IOError) as err:
         print('Error configuring logging: %s' % str(err))
         print('The system will exit.')
         sys.exit(1)
@@ -408,7 +404,7 @@ def main():
     try:
         if cp.getboolean('blah', 'enabled'):
             handle_parsing('blah', apel_db, cp)
-    except (ParserConfigException, ConfigParser.NoOptionError) as e:
+    except (ParserConfigException, configparser.NoOptionError) as e:
         log.fatal('Parser misconfigured: %s', e)
         log.fatal('Parser will exit.')
         log.info(LOG_BREAK)
@@ -419,7 +415,7 @@ def main():
     try:
         if cp.getboolean('batch', 'enabled'):
             handle_parsing(cp.get('batch', 'type'), apel_db, cp)
-    except (ParserConfigException, ConfigParser.NoOptionError) as e:
+    except (ParserConfigException, configparser.NoOptionError) as e:
         log.fatal('Parser misconfigured: %s', e)
         log.fatal('Parser will exit.')
         log.info(LOG_BREAK)

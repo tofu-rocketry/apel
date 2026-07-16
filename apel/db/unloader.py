@@ -22,13 +22,7 @@ from future.builtins import str
 import datetime
 import os
 import logging
-try:
-    import cStringIO as StringIO
-except ImportError:
-    try:
-        import StringIO
-    except ImportError:
-        import io as StringIO
+import io
 
 from apel.db import (Query, ApelDbException, JOB_MSG_HEADER, JOB_MSG_HEADER_04,
                      SUMMARY_MSG_HEADER, SUMMARY_MSG_HEADER_04,
@@ -291,7 +285,7 @@ class DbUnloader:
 
         This is currently enabled only for CAR.
         '''
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         if type(records[0]) == JobRecord:
             XML_HEADER = '<?xml version="1.0" ?>'
             UR_OPEN = ('<urf:UsageRecords xmlns:urf="http://eu-emi.eu/namespace'
@@ -341,7 +335,7 @@ class DbUnloader:
         ) and not self.include_infrastructure_description:
             exclude_fields.add('InfrastructureDescription')
 
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         buf.write(self.APEL_HEADERS[record_type] + '\n')
         buf.write('%%\n'.join( [ record.get_msg(self._withhold_dns,
                                                 exclude_fields=exclude_fields)

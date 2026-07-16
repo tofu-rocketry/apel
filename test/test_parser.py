@@ -2,11 +2,7 @@ from future import standard_library
 standard_library.install_aliases()
 
 import bz2
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    import configparser as ConfigParser
-except ImportError:
-    import ConfigParser
+import configparser
 import gzip
 import os
 import re
@@ -66,7 +62,7 @@ class ParserTest(unittest.TestCase):
         path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
                                             'conf', 'parser.cfg'))
         # Read the config and fill in empty values.
-        self.cp = ConfigParser.ConfigParser()
+        self.cp = configparser.ConfigParser()
         self.cp.read(path)
         self.cp.set('site_info', 'site_name', 'TestSite')
         self.cp.set('site_info', 'lrms_server', 'TestServer')

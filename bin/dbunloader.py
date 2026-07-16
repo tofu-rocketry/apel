@@ -22,11 +22,7 @@ from future import standard_library
 standard_library.install_aliases()
 
 from argparse import ArgumentParser
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    import configparser as ConfigParser
-except ImportError:
-    import ConfigParser
+import configparser
 import logging.config
 import os
 import sys
@@ -61,7 +57,7 @@ def _bounded_records_per_message(config_object, logger):
             return RECORDS_PER_MESSAGE_MAX
         else:
             return records_per_message
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         logger.info(
             'records_per_message not specified, defaulting to %d.',
             RECORDS_PER_MESSAGE_DEFAULT,
@@ -103,7 +99,7 @@ if __name__ == '__main__':
         logging.warning('Separate logging config file option has been deprecated.')
 
     # Set default for newer options as they may not exist in config file.
-    cp = ConfigParser.ConfigParser({'interval': 'latest', 'dict_benchmark_type': 'false'})
+    cp = configparser.ConfigParser({'interval': 'latest', 'dict_benchmark_type': 'false'})
     cp.read([options.config])
 
     # set up logging
@@ -111,14 +107,14 @@ if __name__ == '__main__':
         set_up_logging(cp.get('logging', 'logfile'), cp.get('logging', 'level'),
                        cp.getboolean('logging', 'console'))
         log = logging.getLogger('dbunloader')
-    except (ConfigParser.Error, ValueError, IOError) as err:
+    except (configparser.Error, ValueError, IOError) as err:
         print('Error configuring logging: %s' % err)
         print('The system will exit.')
         sys.exit(1)
 
     db = None
 
-    dbcp = ConfigParser.ConfigParser()
+    dbcp = configparser.ConfigParser()
     dbcp.read([options.db])
 
     try:
@@ -145,27 +141,27 @@ if __name__ == '__main__':
 
     try:
         send_ur = cp.getboolean('unloader', 'send_ur')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         send_ur = False
 
     try:
         local_jobs = cp.getboolean('unloader', 'local_jobs')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         local_jobs = False
 
     try:
         withhold_dns = cp.getboolean('unloader', 'withhold_dns')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         withhold_dns = False
 
     try:
         decimal_cpu_count = cp.getboolean('unloader', 'decimal_cpu_count')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         decimal_cpu_count = False
 
     try:
         include_infrastructure_description = cp.getboolean('unloader', 'include_infrastructure_description')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         include_infrastructure_description = False
 
     include_vos      = None
@@ -173,12 +169,12 @@ if __name__ == '__main__':
     try:
         include      = cp.get('unloader', 'include_vos')
         include_vos  = [ vo.strip() for vo in include.split(',') ]
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         # Only exclude VOs if we haven't specified the ones to include.
         try:
             exclude      = cp.get('unloader', 'exclude_vos')
             exclude_vos  = [ vo.strip() for vo in exclude.split(',') ]
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             pass  # Optional config so fall-back to None as defined above.
 
     interval = cp.get('unloader', 'interval')

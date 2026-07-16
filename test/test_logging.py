@@ -8,10 +8,7 @@ import os
 import sys
 import tempfile
 import unittest
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+from io import StringIO
 
 from apel.common import set_up_logging
 

@@ -1,7 +1,7 @@
 from datetime import datetime
 import unittest
 
-import mock
+import unittest.mock as mock
 
 import apel.parsers
 import apel.parsers.sge

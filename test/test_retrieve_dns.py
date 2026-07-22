@@ -3,7 +3,7 @@ from future.builtins import zip
 import os
 import tempfile
 import unittest
-import mock
+import unittest.mock as mock
 import xml.dom.minidom
 
 import bin.retrieve_dns

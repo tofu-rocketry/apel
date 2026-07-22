@@ -10,7 +10,7 @@ import shutil
 import tempfile
 import unittest
 
-import mock
+import unittest.mock as mock
 
 import bin.parser
 

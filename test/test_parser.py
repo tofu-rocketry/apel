@@ -7,7 +7,7 @@ import shutil
 import tempfile
 import unittest
 
-import unittest.mock as mock
+from unittest import mock
 
 import bin.parser
 

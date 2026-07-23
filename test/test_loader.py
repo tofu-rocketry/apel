@@ -1,11 +1,11 @@
+from unittest import mock
+from unittest.mock import call
 import dirq
-import unittest.mock as mock
 import os
 import shutil
 import tempfile
 import unittest
 import logging
-from unittest.mock import call
 
 from apel.common import json_utils
 import apel.db.loader

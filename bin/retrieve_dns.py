@@ -24,6 +24,9 @@
 @author: Will Rogers
 '''
 
+import configparser
+import urllib.request
+import urllib.error
 from apel.common import set_up_logging, LOG_BREAK
 from apel import __version__
 
@@ -34,9 +37,6 @@ import sys
 import time
 import xml.dom.minidom
 import xml.parsers.expat
-import configparser
-import urllib.request
-import urllib.error
 
 
 log = logging.getLogger('auth')

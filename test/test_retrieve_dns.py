@@ -1,7 +1,7 @@
 import os
 import tempfile
 import unittest
-import unittest.mock as mock
+from unittest import mock
 import xml.dom.minidom
 
 import bin.retrieve_dns

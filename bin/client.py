@@ -28,9 +28,9 @@
 import sys
 import os
 import logging.config
+import configparser
 import ldap
 from argparse import ArgumentParser
-import configparser
 
 from apel import __version__
 from apel.db import ApelDb, ApelDbException

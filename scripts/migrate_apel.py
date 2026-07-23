@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Migrate from the old apel client database to the new apel client database.
 

@@ -111,10 +111,7 @@ def get_xml(url, proxy):
     Given a URL, fetch the contents.  We expect the URL to be https and
     the contents to be XML.
     '''
-    if sys.version_info >= (3,):
-        return execute_py3_get_xml_content(url, proxy)
-    else:
-        return execute_py2_get_xml_content(url, proxy)
+    return execute_py3_get_xml_content(url, proxy)
 
 def execute_py3_get_xml_content(url, proxy):
     """Helper method to execute python3 code for urllib code flow"""

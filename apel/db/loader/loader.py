@@ -157,7 +157,7 @@ class Loader:
             except (RecordFactoryException, LoaderException,
                     InvalidRecordException, apel.db.ApelDbException,
                     XMLParserException, ExpatError) as err:
-                if sys.version_info >= (3,) and isinstance(err, ExpatError):
+                if isinstance(err, ExpatError):
                     errmsg = "Parsing unsuccessful: %s" % str(errors.messages[err.code])
                 else:
                     errmsg = "Parsing unsuccessful: %s" % str(err)

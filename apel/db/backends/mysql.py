@@ -18,8 +18,6 @@ Created on 27 Oct 2011
     @author: Will Rogers, Konrad Jopek
 '''
 
-from future.builtins import str
-
 from apel.db import ApelDbException
 from apel.db.records import (BlahdRecord,
                              CloudRecord,

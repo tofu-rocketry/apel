@@ -1,8 +1,5 @@
 """Test cases for private funtion in dbunloader."""
 
-from future import standard_library
-standard_library.install_aliases()
-
 import configparser
 import logging
 import unittest

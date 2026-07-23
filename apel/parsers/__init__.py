@@ -18,8 +18,6 @@ Package with Apel parsers.
 @author: Will Rogers,  Konrad Jopek
 '''
 
-from __future__ import absolute_import
-
 LOGGER_ID = 'parser'
 
 from .parser import Parser

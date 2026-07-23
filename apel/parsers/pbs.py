@@ -15,8 +15,6 @@
 
 '''
 
-from future.builtins import zip
-
 from apel.db.records.event import EventRecord
 from apel.parsers import Parser
 from apel.common import parse_time

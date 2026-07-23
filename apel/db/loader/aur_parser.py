@@ -16,8 +16,6 @@
    @author: Will Rogers, Konrad Jopek, Stuart Pullinger
 '''
 
-from __future__ import absolute_import
-
 from apel.common import iso2seconds, parse_timestamp
 from .xml_parser import XMLParser, XMLParserException
 from apel.db.records.normalised_summary import NormalisedSummaryRecord

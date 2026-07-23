@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from future.builtins import str, super
-
 from datetime import datetime
 import time
 from xml.dom.minidom import Document

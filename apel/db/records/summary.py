@@ -16,8 +16,6 @@
     @author Will Rogers
 '''
 
-from future.builtins import str, super
-
 from apel.db.records import Record, InvalidRecordException
 from xml.dom.minidom import Document
 from datetime import datetime

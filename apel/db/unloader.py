@@ -15,9 +15,6 @@
 
    @author: Konrad Jopek, Will Rogers
 '''
-from future import standard_library
-standard_library.install_aliases()
-from future.builtins import str
 
 import datetime
 import os

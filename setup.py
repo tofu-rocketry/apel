@@ -82,7 +82,7 @@ def main():
 
     # Python 3.x dependencies
     _install_requires = ['mysqlclient', 'iso8601',
-                         'python-ldap', 'dirq', 'future', 'jsonschema']
+                         'python-ldap', 'dirq', 'jsonschema']
 
     # For 'python setup.py install' to
     # work (on Linux SL6), 'python-daemon'

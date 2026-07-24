@@ -171,7 +171,6 @@ FPM_PYTHON="--depends python3 \
     --depends python3-dirq \
     --depends python3-iso8601 \
     --depends python3-mysqlclient \
-    --depends python3-future \
     --depends python3-jsonschema "
 FPM_PYTHON_SERVER_DEPS="--depends python3-daemon"
 

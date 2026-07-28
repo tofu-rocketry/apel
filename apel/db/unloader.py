@@ -17,9 +17,11 @@
 '''
 
 import datetime
-import os
-import logging
 import io
+import logging
+import os
+
+from dirq.QueueSimple import QueueSimple
 
 from apel.db import (Query, ApelDbException, JOB_MSG_HEADER, JOB_MSG_HEADER_04,
                      SUMMARY_MSG_HEADER, SUMMARY_MSG_HEADER_04,
@@ -30,7 +32,6 @@ from apel.db.records import (JobRecord, JobRecord04, SummaryRecord, SummaryRecor
                              NormalisedSummaryRecord, NormalisedSummaryRecord04,
                              SyncRecord, CloudRecord, CloudSummaryRecord, StorageRecord,
                              AcceleratorRecord, AcceleratorSummary)
-from dirq.QueueSimple import QueueSimple
 
 
 log = logging.getLogger(__name__)

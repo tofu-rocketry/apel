@@ -6,11 +6,9 @@ import re
 import shutil
 import tempfile
 import unittest
-
 from unittest import mock
 
 import bin.parser
-
 
 
 class ParserTest(unittest.TestCase):

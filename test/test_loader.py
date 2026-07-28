@@ -1,14 +1,15 @@
-from unittest import mock
-from unittest.mock import call
-import dirq
+import logging
 import os
 import shutil
 import tempfile
 import unittest
-import logging
+from unittest import mock
+from unittest.mock import call
 
-from apel.common import json_utils
+import dirq
+
 import apel.db.loader
+from apel.common import json_utils
 
 
 schema = {"body": "string", "signer": "string",

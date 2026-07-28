@@ -2,13 +2,15 @@
 
 # Migrate from the old apel client database to the new apel client database.
 
-from apel.common.parsing_utils import parse_fqan
-
-import MySQLdb
+import datetime
 import sys
 import time
-import datetime
 import warnings
+
+import MySQLdb
+
+from apel.common.parsing_utils import parse_fqan
+
 
 # how often to commit records to target database
 COMMIT_THRESHOLD=500

@@ -24,26 +24,26 @@
     @author: Konrad Jopek, Will Rogers
 '''
 
+import bz2
+import configparser
+import gzip
 import logging.config
 import os
-import sys
 import re
-import gzip
-import bz2
+import sys
 from argparse import ArgumentParser
-import configparser
 
 from apel import __version__
+from apel.common import LOG_BREAK, calculate_hash, set_up_logging
+from apel.common.exceptions import default_handler, install_exc_handler
 from apel.db import ApelDb, ApelDbException
 from apel.db.records import ProcessedRecord
-from apel.common import calculate_hash, set_up_logging, LOG_BREAK
-from apel.common.exceptions import install_exc_handler, default_handler
 from apel.parsers.blah import BlahParser
-from apel.parsers.lsf import LSFParser
-from apel.parsers.sge import SGEParser
-from apel.parsers.pbs import PBSParser
-from apel.parsers.slurm import SlurmParser
 from apel.parsers.htcondor import HTCondorParser
+from apel.parsers.lsf import LSFParser
+from apel.parsers.pbs import PBSParser
+from apel.parsers.sge import SGEParser
+from apel.parsers.slurm import SlurmParser
 
 
 LOGGER_ID = 'parser'

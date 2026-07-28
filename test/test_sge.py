@@ -1,10 +1,10 @@
-from datetime import datetime
 import unittest
-
+from datetime import datetime
 from unittest import mock
 
 import apel.parsers
 import apel.parsers.sge
+
 
 class ParserSGETest(unittest.TestCase):
     '''

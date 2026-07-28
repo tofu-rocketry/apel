@@ -19,17 +19,18 @@
 @author: Will Rogers
 '''
 
-import sys
-import os
-import time
-import logging.config
 import configparser
+import logging.config
+import os
+import sys
+import time
+from argparse import ArgumentParser
 
 from daemon.daemon import DaemonContext
-from apel.db.loader import Loader, LoaderException
-from apel.common import set_up_logging
+
 from apel import __version__
-from argparse import ArgumentParser
+from apel.common import set_up_logging
+from apel.db.loader import Loader, LoaderException
 
 
 log = None

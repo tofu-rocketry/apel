@@ -19,16 +19,16 @@
 @author: Will Rogers
 '''
 
-from argparse import ArgumentParser
+import configparser
 import datetime
 import logging.config
 import os
 import sys
-import configparser
+from argparse import ArgumentParser
 
-from apel.db import ApelDb, ApelDbException
-from apel.common import set_up_logging, LOG_BREAK
 from apel import __version__
+from apel.common import LOG_BREAK, set_up_logging
+from apel.db import ApelDb, ApelDbException
 
 
 def runprocess(db_config_file, config_file):

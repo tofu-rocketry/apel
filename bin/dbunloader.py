@@ -17,16 +17,17 @@
    @author: Konrad Jopek, Will Rogers
 '''
 
-from argparse import ArgumentParser
 import configparser
 import logging.config
 import os
 import sys
+from argparse import ArgumentParser
 
 from apel import __version__
 from apel.common import set_up_logging
 from apel.db import ApelDb, ApelDbException
 from apel.db.unloader import DbUnloader
+
 
 RECORDS_PER_MESSAGE_MIN = 1
 RECORDS_PER_MESSAGE_DEFAULT = 1000

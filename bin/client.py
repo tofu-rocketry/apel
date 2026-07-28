@@ -25,20 +25,21 @@
    @author: Konrad Jopek, Will Rogers
 '''
 
-import sys
-import os
-import logging.config
 import configparser
-import ldap
+import logging.config
+import os
+import sys
 from argparse import ArgumentParser
 
+import ldap
+import ssm.agents
+
 from apel import __version__
+from apel.common import set_up_logging
+from apel.common.exceptions import default_handler, install_exc_handler
 from apel.db import ApelDb, ApelDbException
 from apel.db.unloader import DbUnloader
 from apel.ldap import fetch_specint
-from apel.common import set_up_logging
-from apel.common.exceptions import install_exc_handler, default_handler
-import ssm.agents
 
 
 DB_BACKEND = 'mysql'

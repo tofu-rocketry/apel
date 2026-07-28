@@ -25,18 +25,18 @@
 '''
 
 import configparser
-import urllib.request
-import urllib.error
-from apel.common import set_up_logging, LOG_BREAK
-from apel import __version__
-
-from argparse import ArgumentParser
 import logging.config
 import os
 import sys
 import time
+import urllib.error
+import urllib.request
 import xml.dom.minidom
 import xml.parsers.expat
+from argparse import ArgumentParser
+
+from apel import __version__
+from apel.common import LOG_BREAK, set_up_logging
 
 
 log = logging.getLogger('auth')

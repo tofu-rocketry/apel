@@ -20,8 +20,9 @@
     @author: Will Rogers
 '''
 
-import sys
 import os
+import sys
+
 from dirq.queue import Queue
 from dirq.QueueSimple import QueueSimple
 

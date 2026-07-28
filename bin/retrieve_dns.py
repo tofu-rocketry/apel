@@ -111,10 +111,6 @@ def get_xml(url, proxy):
     Given a URL, fetch the contents.  We expect the URL to be https and
     the contents to be XML.
     '''
-    return execute_py3_get_xml_content(url, proxy)
-
-def execute_py3_get_xml_content(url, proxy):
-    """Helper method to execute python3 code for urllib code flow"""
     try:
         # Try without a proxy
         conn = urllib.request.urlopen(url)
@@ -127,25 +123,6 @@ def execute_py3_get_xml_content(url, proxy):
             proxyHandler = urllib.request.ProxyHandler(proxies)
             opener = urllib.request.build_opener(proxyHandler)
             conn = opener.open(url)
-            dn_xml = conn.read()
-            conn.close()
-        else:
-            raise
-
-    return dn_xml
-
-def execute_py2_get_xml_content(url, proxy):
-    """Helper method to execute python2 code for urllib code flow"""
-    try:
-        # Try without a proxy
-        conn = urllib.urlopen(url)
-        dn_xml = conn.read()
-        conn.close()
-    except IOError:
-        # Try with a proxy
-        if proxy is not None:
-            proxy = {"http": proxy}
-            conn = urllib.urlopen(url, proxies=proxy)
             dn_xml = conn.read()
             conn.close()
         else:

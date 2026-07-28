@@ -20,7 +20,6 @@ Module containing the Loader class.
 
 import logging
 import os
-import sys
 from xml.parsers.expat import ExpatError, errors
 
 from dirq.queue import Queue

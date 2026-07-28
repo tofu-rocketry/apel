@@ -1,10 +1,8 @@
-from future.builtins import zip
-
 import os
 import tempfile
 import unittest
-import mock
 import xml.dom.minidom
+from unittest import mock
 
 import bin.retrieve_dns
 

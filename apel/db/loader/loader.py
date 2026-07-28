@@ -18,12 +18,8 @@
 Module containing the Loader class.
 '''
 
-from __future__ import absolute_import
-from future.builtins import next, str
-
 import logging
 import os
-import sys
 from xml.parsers.expat import ExpatError, errors
 
 from dirq.queue import Queue
@@ -160,7 +156,7 @@ class Loader:
             except (RecordFactoryException, LoaderException,
                     InvalidRecordException, apel.db.ApelDbException,
                     XMLParserException, ExpatError) as err:
-                if sys.version_info >= (3,) and isinstance(err, ExpatError):
+                if isinstance(err, ExpatError):
                     errmsg = "Parsing unsuccessful: %s" % str(errors.messages[err.code])
                 else:
                     errmsg = "Parsing unsuccessful: %s" % str(err)

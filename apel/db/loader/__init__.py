@@ -18,8 +18,6 @@
 Module containing the Loader object.
 '''
 
-from __future__ import absolute_import
-
 # public interface for apel.dbloader
 
 from .loader import Loader, LoaderException

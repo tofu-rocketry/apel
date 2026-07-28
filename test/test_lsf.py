@@ -1,5 +1,3 @@
-from future.builtins import zip
-
 import datetime
 import unittest
 

@@ -18,8 +18,6 @@
 Module containing the Record class.
 '''
 
-from future.builtins import str, zip
-
 from apel.db import LOGGER_ID
 
 from datetime import datetime

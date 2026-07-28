@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2012 STFC
 #
@@ -24,30 +24,19 @@
 @author: Will Rogers
 '''
 
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from future.builtins import str
-
-from apel.common import set_up_logging, LOG_BREAK
-from apel import __version__
-
-from argparse import ArgumentParser
+import configparser
 import logging.config
 import os
 import sys
 import time
+import urllib.error
+import urllib.request
 import xml.dom.minidom
 import xml.parsers.expat
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    # urllib code flow got changed in Python 3
-    import configparser as ConfigParser
-    import urllib.request
-    import urllib.error
-except ImportError:
-    import ConfigParser
-    import urllib
+from argparse import ArgumentParser
+
+from apel import __version__
+from apel.common import LOG_BREAK, set_up_logging
 
 
 log = logging.getLogger('auth')
@@ -66,50 +55,50 @@ class Configuration:
 def get_config(config_file):
     """Using the config file location, get a config object."""
     # Read configuration from file
-    cp = ConfigParser.ConfigParser()
+    cp = configparser.ConfigParser()
     cp.read(config_file)
 
     c = Configuration()
 
     try:
         c.gocdb_url = cp.get('auth', 'gocdb_url')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         c.gocdb_url = None
 
     try:
         extra_dns = cp.get('auth', 'extra-dns')
         c.extra_dns = os.path.normpath(os.path.expandvars(extra_dns))
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         c.extra_dns = None
 
     try:
         banned_dns = cp.get('auth', 'banned-dns')
         c.banned_dns = os.path.normpath(os.path.expandvars(banned_dns))
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         c.banned_dns = None
 
     try:
         dn_file = cp.get('auth', 'allowed-dns')
         c.dn_file = os.path.normpath(os.path.expandvars(dn_file))
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         c.dn_file = None
 
     try:
         proxy = cp.get('auth', 'proxy')
         c.proxy = proxy
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         c.proxy = None
 
     try:
         c.expire_hours = cp.getint('auth', 'expire_hours')
-    except ConfigParser.NoOptionError:
+    except configparser.NoOptionError:
         c.expire_hours = 0
 
     # set up logging
     try:
         set_up_logging(cp.get('logging', 'logfile'), cp.get('logging', 'level'),
                        cp.getboolean('logging', 'console'))
-    except (ConfigParser.Error, ValueError, IOError) as err:
+    except (configparser.Error, ValueError, IOError) as err:
         print('Error configuring logging: %s' % str(err))
         print('The system will exit.')
         sys.exit(1)
@@ -122,13 +111,6 @@ def get_xml(url, proxy):
     Given a URL, fetch the contents.  We expect the URL to be https and
     the contents to be XML.
     '''
-    if sys.version_info >= (3,):
-        return execute_py3_get_xml_content(url, proxy)
-    else:
-        return execute_py2_get_xml_content(url, proxy)
-
-def execute_py3_get_xml_content(url, proxy):
-    """Helper method to execute python3 code for urllib code flow"""
     try:
         # Try without a proxy
         conn = urllib.request.urlopen(url)
@@ -141,25 +123,6 @@ def execute_py3_get_xml_content(url, proxy):
             proxyHandler = urllib.request.ProxyHandler(proxies)
             opener = urllib.request.build_opener(proxyHandler)
             conn = opener.open(url)
-            dn_xml = conn.read()
-            conn.close()
-        else:
-            raise
-
-    return dn_xml
-
-def execute_py2_get_xml_content(url, proxy):
-    """Helper method to execute python2 code for urllib code flow"""
-    try:
-        # Try without a proxy
-        conn = urllib.urlopen(url)
-        dn_xml = conn.read()
-        conn.close()
-    except IOError:
-        # Try with a proxy
-        if proxy is not None:
-            proxy = {"http": proxy}
-            conn = urllib.urlopen(url, proxies=proxy)
             dn_xml = conn.read()
             conn.close()
         else:

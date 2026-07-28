@@ -162,32 +162,17 @@ cp -r "$SOURCE_DIR/$APEL_DIR/apel/"* "$TEMP_DIR_FOR_LIB/$PYTHON_ROOT_DIR/$LIB_EX
 # In addition we make apel into compiled bytecode to replicate what rpm was doing.
 $PY_VERSION -m compileall "$TEMP_DIR_FOR_LIB/$PYTHON_ROOT_DIR/$LIB_EXTENSION/apel/"
 
-# Set up dependencies for apel-lib based on Python version
-if [[ ${PY_NUM:0:1} == "3" ]]; then
-    echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
-    FPM_PYTHON="--depends python3 \
-        --depends python3-pip \
-        --depends python3-ldap \
-        --depends openldap-devel \
-        --depends python3-dirq \
-        --depends python3-iso8601 \
-        --depends python3-mysqlclient \
-        --depends python3-future \
-        --depends python3-jsonschema "
-    FPM_PYTHON_SERVER_DEPS="--depends python3-daemon"
-elif [[ ${PY_NUM:0:1} == "2" ]]; then
-    echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
-    # This dependencies is for python2 in el7 environment.
-    FPM_PYTHON="--depends python2 \
-        --depends python2-pip \
-        --depends python-ldap \
-        --depends openldap-devel \
-        --depends python-dirq \
-        --depends python-iso8601 \
-        --depends MySQL-python \
-        --depends python2-future "
-    FPM_PYTHON_SERVER_DEPS="--depends python-daemon"
-fi
+# Set up dependencies for apel-lib
+echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
+FPM_PYTHON="--depends python3 \
+    --depends python3-pip \
+    --depends python3-ldap \
+    --depends openldap-devel \
+    --depends python3-dirq \
+    --depends python3-iso8601 \
+    --depends python3-mysqlclient \
+    --depends python3-jsonschema "
+FPM_PYTHON_SERVER_DEPS="--depends python3-daemon"
 
 # Build the packages
 SOURCE_TYPE="dir"

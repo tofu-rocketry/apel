@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2012 STFC
 #
@@ -19,25 +19,16 @@
 @author: Will Rogers
 '''
 
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from future.builtins import str
-
-from argparse import ArgumentParser
+import configparser
 import datetime
 import logging.config
 import os
 import sys
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    import configparser as ConfigParser
-except ImportError:
-    import ConfigParser
+from argparse import ArgumentParser
 
-from apel.db import ApelDb, ApelDbException
-from apel.common import set_up_logging, LOG_BREAK
 from apel import __version__
+from apel.common import LOG_BREAK, set_up_logging
+from apel.db import ApelDb, ApelDbException
 
 
 def runprocess(db_config_file, config_file):
@@ -46,12 +37,12 @@ def runprocess(db_config_file, config_file):
 
     try:
         # Read configuration from file
-        cp = ConfigParser.ConfigParser()
+        cp = configparser.ConfigParser()
         cp.read(config_file)
 
         pidfile = cp.get('summariser', 'pidfile')
 
-        dbcp = ConfigParser.ConfigParser()
+        dbcp = configparser.ConfigParser()
         dbcp.read(db_config_file)
 
         db_backend = dbcp.get('db', 'backend')
@@ -61,14 +52,14 @@ def runprocess(db_config_file, config_file):
         db_username = dbcp.get('db', 'username')
         db_password = dbcp.get('db', 'password')
 
-    except (ConfigParser.Error, ValueError, IOError) as err:
+    except (configparser.Error, ValueError, IOError) as err:
         print('Error in configuration file %s: %s' % (config_file, str(err)))
         print('The system will exit.')
         sys.exit(1)
 
     try:
         db_type = dbcp.get('db', 'type')
-    except ConfigParser.Error:
+    except configparser.Error:
         db_type = 'cpu'
 
     # set up logging
@@ -76,7 +67,7 @@ def runprocess(db_config_file, config_file):
         set_up_logging(cp.get('logging', 'logfile'), cp.get('logging', 'level'),
                        cp.getboolean('logging', 'console'))
         log = logging.getLogger('summariser')
-    except (ConfigParser.Error, ValueError, IOError) as err:
+    except (configparser.Error, ValueError, IOError) as err:
         print('Error configuring logging: %s' % str(err))
         print('The system will exit.')
         sys.exit(1)
@@ -115,7 +106,7 @@ def runprocess(db_config_file, config_file):
         stale_summary_age_limit_days = cp.getint('summariser',
                                                  'stale_summary_window_days')
 
-    except ConfigParser.NoOptionError as _error:
+    except configparser.NoOptionError as _error:
         log.debug("No settings defined to clean up stale summaries.")
         stale_summary_clean_up = False
         stale_summary_age_limit_days = None

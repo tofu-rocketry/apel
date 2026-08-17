@@ -345,7 +345,10 @@ DROP PROCEDURE IF EXISTS GetModelSummaries;
 DELIMITER //
 CREATE PROCEDURE GetModelSummaries()
 BEGIN
-    REPLACE INTO AcceleratorModelSummaries
+    REPLACE INTO AcceleratorModelSummaries (
+        SiteName, FQAN, GlobalUserName, Type, Model, Month, Year,
+        Count, Cores, AvailableDuration, ActiveDuration,
+        AssociatedRecordType, BenchmarkType, Benchmark, Category)
     SELECT
       AcceleratorSummaries.SiteName,
       AcceleratorRecords.FQAN,

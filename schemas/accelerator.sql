@@ -70,7 +70,7 @@ CREATE TABLE AcceleratorRecords (
   MeasurementMonth INT NOT NULL,
   MeasurementYear INT NOT NULL,
 
-  AssociatedRecordType VARCHAR(255) NOT NULL,
+  AssociatedRecordType VARCHAR(50) NOT NULL,
   AssociatedRecord VARCHAR(255) NOT NULL,
 
   GlobalUserName VARCHAR(255),
@@ -82,7 +82,7 @@ CREATE TABLE AcceleratorRecords (
   AvailableDuration INT,
   BenchmarkType VARCHAR(255),
   Benchmark DECIMAL(10,3),
-  Type VARCHAR(255) NOT NULL,
+  Type VARCHAR(50) NOT NULL,
   Model VARCHAR(255) NOT NULL,
   PublisherDNID INT NOT NULL,
 
@@ -98,7 +98,7 @@ DELIMITER //
 CREATE PROCEDURE ReplaceAcceleratorRecord(
   measurementMonth INT,
   measurementYear INT,
-  associatedRecordType VARCHAR(255),
+  associatedRecordType VARCHAR(50),
   associatedRecord VARCHAR(255),
   globalUserName VARCHAR(255),
   fqan VARCHAR(255),
@@ -109,7 +109,7 @@ CREATE PROCEDURE ReplaceAcceleratorRecord(
   availableDuration INT,
   benchmarkType VARCHAR(255),
   benchmark DECIMAL,
-  type VARCHAR(255),
+  type VARCHAR(50),
   model VARCHAR(255),
   publisherDN VARCHAR(255)
 )
@@ -159,7 +159,7 @@ CREATE TABLE AcceleratorSummaries (
     UpdateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     Month INT NOT NULL,
     Year INT NOT NULL,
-    AssociatedRecordType VARCHAR(255) NOT NULL,
+    AssociatedRecordType VARCHAR(50) NOT NULL,
     GlobalUserName VARCHAR(255),
     SiteName VARCHAR(255) NOT NULL,
     Count DECIMAL(10,3) NOT NULL,
@@ -168,7 +168,7 @@ CREATE TABLE AcceleratorSummaries (
     ActiveDuration INT,
     BenchmarkType VARCHAR(255),
     Benchmark DECIMAL(10,3),
-    Type VARCHAR(255) NOT NULL,
+    Type VARCHAR(50) NOT NULL,
     Model VARCHAR(255) NOT NULL,
     NumberOfRecords INT NOT NULL,
     PublisherDNID VARCHAR(255) NOT NULL,
@@ -219,7 +219,7 @@ DELIMITER //
 CREATE PROCEDURE ReplaceAcceleratorSummaryRecord(
   Month INT,
   Year INT,
-  associatedRecordType VARCHAR(255),
+  associatedRecordType VARCHAR(50),
   globalUserName VARCHAR(255),
   SiteName VARCHAR(255),
   count DECIMAL(10,3),
@@ -228,7 +228,7 @@ CREATE PROCEDURE ReplaceAcceleratorSummaryRecord(
   availableDuration INT,
   benchmarkType VARCHAR(255),
   benchmark DECIMAL,
-  type VARCHAR(255),
+  type VARCHAR(50),
   model VARCHAR(255),
   number INT,
   publisherDNID INT
@@ -285,7 +285,7 @@ CREATE TABLE AcceleratorModels (
     UpdateTime TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     Date TIMESTAMP NOT NULL,
     Model VARCHAR(255) NOT NULL,
-    Type VARCHAR(255) NOT NULL,
+    Type VARCHAR(50) NOT NULL,
     Category VARCHAR(255),
 
     PRIMARY KEY (Model, Type, Date)
@@ -301,7 +301,7 @@ CREATE TABLE AcceleratorModelSummaries (
     SiteName VARCHAR(255) NOT NULL,
     FQAN VARCHAR(255) NOT NULL,
     GlobalUserName VARCHAR(255),
-    Type VARCHAR(255) NOT NULL,
+    Type VARCHAR(50) NOT NULL,
     Model VARCHAR(255) NOT NULL,
     Month INT NOT NULL,
     Year INT NOT NULL,
@@ -309,7 +309,7 @@ CREATE TABLE AcceleratorModelSummaries (
     Cores INT,
     AvailableDuration INT NOT NULL,
     ActiveDuration INT,
-    AssociatedRecordType VARCHAR(255) NOT NULL,
+    AssociatedRecordType VARCHAR(50) NOT NULL,
     BenchmarkType VARCHAR(255),
     Benchmark DECIMAL(10,3),
     Category VARCHAR(255),
@@ -398,7 +398,7 @@ DROP PROCEDURE IF EXISTS UpdateModel;
 DELIMITER //
 CREATE PROCEDURE UpdateModel(
     model VARCHAR(255),
-    type VARCHAR(255),
+    type VARCHAR(50),
     category VARCHAR(255)
 )
 BEGIN
@@ -417,7 +417,7 @@ DELIMITER //
 CREATE PROCEDURE AlterModel(
     date TIMESTAMP,
     model VARCHAR(255),
-    type VARCHAR(255),
+    type VARCHAR(50),
     col VARCHAR(255),
     val VARCHAR(255)
 )

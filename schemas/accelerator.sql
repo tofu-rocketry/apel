@@ -256,7 +256,7 @@ VALUES(
   Year,
   associatedRecordType,
   globalUserName,
-  SiteNameLookup(SiteName),
+  SiteName,
   count,
   cores,
   activeDuration,

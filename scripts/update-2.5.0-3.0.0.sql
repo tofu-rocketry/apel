@@ -1,6 +1,9 @@
 -- ============================================================================
 -- APEL UPDATE SCRIPT FOR CLIENT SCHEMA
--- APEL version 2.5.0 databases of the following types to x.x.x:
+-- This script contains a SQL block that can update
+-- APEL version 2.5.0 databases of the following types to 3.0.0:
+--  - Client Grid Accounting Database
+--
 -- Run this script against the grid client database
 --
 -- This script will:

@@ -167,7 +167,6 @@ echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
 FPM_PYTHON="--depends python3 \
     --depends python3-pip \
     --depends python3-ldap \
-    --depends openldap-devel \
     --depends python3-dirq \
     --depends python3-iso8601 \
     --depends python3-mysqlclient \

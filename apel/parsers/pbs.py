@@ -15,8 +15,6 @@
 
 '''
 
-from future.builtins import zip
-
 from apel.db.records.event import EventRecord
 from apel.parsers import Parser
 from apel.common import parse_time
@@ -83,7 +81,8 @@ class PBSParser(Parser):
                    'CpuDuration'   : lambda x: cput_function(x['resources_used.cput']),
                    'StartTime'     : lambda x: int(x['start']),
                    'StopTime'      : lambda x: int(x['end']),
-                   'Infrastructure': lambda x: "APEL-CREAM-PBS",
+                   'Infrastructure': lambda *args: self.get_client_version() +
+                                                        "-CREAM-PBS",
                    'MachineName'   : lambda x: self.machine_name,
                    # remove 'kb' string from the end
                    'MemoryReal'    : lambda x: int(x['resources_used.mem'][:-2]),

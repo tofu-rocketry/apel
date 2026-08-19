@@ -1,5 +1,3 @@
-from future.builtins import zip
-
 import datetime
 import unittest
 
@@ -69,7 +67,8 @@ class HTCondorParserTest(unittest.TestCase):
 
             self.assertEqual(cont['Site'], 'testSite')
             self.assertEqual(cont['MachineName'], 'testHost')
-            self.assertEqual(cont['Infrastructure'], 'APEL-CREAM-HTCONDOR')
+            self.assertEqual(cont['Infrastructure'], self.parser.get_client_version() +
+                                                                 '-CREAM-HTCONDOR')
 
             for key in list(cases[line].keys()):
                 self.assertIn(key, cont, "Key '%s' not in record." % key)
@@ -128,7 +127,8 @@ class HTCondorParserTest(unittest.TestCase):
 
             self.assertEqual(cont['Site'], 'testSite')
             self.assertEqual(cont['MachineName'], 'testHost')
-            self.assertEqual(cont['Infrastructure'], 'APEL-CREAM-HTCONDOR')
+            self.assertEqual(cont['Infrastructure'], self.parser.get_client_version() +
+                                                                 '-CREAM-HTCONDOR')
 
             for key in list(cases[line].keys()):
                 self.assertIn(key, cont, "Key '%s' not in record." % key)

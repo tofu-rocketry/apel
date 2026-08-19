@@ -1,13 +1,6 @@
 """Test cases for private funtion in dbunloader."""
 
-from future import standard_library
-standard_library.install_aliases()
-
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    import configparser as ConfigParser
-except ImportError:
-    import ConfigParser
+import configparser
 import logging
 import unittest
 
@@ -21,7 +14,7 @@ logger = logging.getLogger('test_dbunloader')
 class TestBoundedRecordsPerMessage(unittest.TestCase):
 
     def setUp(self):
-        self.cp = ConfigParser.ConfigParser()
+        self.cp = configparser.ConfigParser()
         self.cp.add_section('unloader')
 
     def test_too_small(self):

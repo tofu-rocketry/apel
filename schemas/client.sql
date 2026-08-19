@@ -444,6 +444,7 @@ CREATE TABLE SuperSummaries (
   VORoleID INT NOT NULL,                -- Foreign key
   SubmitHostId INT NOT NULL,
   InfrastructureType VARCHAR(20),
+  InfrastructureDescription VARCHAR(100),
   ServiceLevelType VARCHAR(50) NOT NULL,
   ServiceLevel DECIMAL(10,3) NOT NULL,
   NodeCount INT NOT NULL,
@@ -464,13 +465,13 @@ DELIMITER //
 CREATE PROCEDURE SummariseJobs()
 BEGIN
     REPLACE INTO SuperSummaries(SiteID, Month, Year, GlobalUserNameID, VOID,
-        VOGroupID, VORoleID, SubmitHostID, InfrastructureType, ServiceLevelType, ServiceLevel,
-        NodeCount, Processors, EarliestEndTime,
+        VOGroupID, VORoleID, SubmitHostID, InfrastructureType, InfrastructureDescription,
+        ServiceLevelType, ServiceLevel, NodeCount, Processors, EarliestEndTime,
         LatestEndTime, WallDuration, CpuDuration, NumberOfJobs)
     SELECT SiteID,
     EndMonth AS Month, EndYear AS Year,
         GlobalUserNameID, VOID, VOGroupID, VORoleID, SubmitHostID, InfrastructureType,
-        ServiceLevelType, ServiceLevel, NodeCount, Processors,
+        InfrastructureDescription, ServiceLevelType, ServiceLevel, NodeCount, Processors,
     MIN(EndTime) AS EarliestEndTime,
     MAX(EndTime) AS LatestEndTime,
     SUM(WallDuration) AS SumWCT,

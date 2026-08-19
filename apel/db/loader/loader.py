@@ -18,12 +18,8 @@
 Module containing the Loader class.
 '''
 
-from __future__ import absolute_import
-from future.builtins import next, object, str
-
 import logging
 import os
-import sys
 from xml.parsers.expat import ExpatError, errors
 
 from dirq.queue import Queue
@@ -46,7 +42,7 @@ class LoaderException(Exception):
     pass
 
 
-class Loader(object):
+class Loader:
     '''
     Designed to read apel messages containing summary records or individual
     job records and load them into the appropriate database.
@@ -149,6 +145,12 @@ class Loader(object):
 
             try:
                 log.info("Loading message %s. ID = %s", self.current_msg, msg_id)
+
+                if (not data or
+                        not data['body'].strip() or
+                        not data['signer'].strip()):
+                    raise LoaderException("Empty message or message element")
+
                 self.load_msg(msg_text, signer)
 
                 if self._save_msgs:
@@ -160,7 +162,7 @@ class Loader(object):
             except (RecordFactoryException, LoaderException,
                     InvalidRecordException, apel.db.ApelDbException,
                     XMLParserException, ExpatError) as err:
-                if sys.version_info >= (3,) and isinstance(err, ExpatError):
+                if isinstance(err, ExpatError):
                     errmsg = "Parsing unsuccessful: %s" % str(errors.messages[err.code])
                 else:
                     errmsg = "Parsing unsuccessful: %s" % str(err)

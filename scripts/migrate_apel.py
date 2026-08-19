@@ -1,17 +1,16 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Migrate from the old apel client database to the new apel client database.
 
-from __future__ import print_function
-from future.builtins import str
+import datetime
+import sys
+import time
+import warnings
+
+import MySQLdb
 
 from apel.common.parsing_utils import parse_fqan
 
-import MySQLdb
-import sys
-import time
-import datetime
-import warnings
 
 # how often to commit records to target database
 COMMIT_THRESHOLD=500

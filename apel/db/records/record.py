@@ -18,8 +18,6 @@
 Module containing the Record class.
 '''
 
-from future.builtins import object, str, zip
-
 from apel.db import LOGGER_ID
 
 from datetime import datetime
@@ -42,7 +40,7 @@ def check_for_null(value):
     nulls = ['none', 'null', '']
     return str(value).lower() in nulls
 
-class Record(object):
+class Record:
     '''
     Represents one APEL database row or record.
 

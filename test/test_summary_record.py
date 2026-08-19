@@ -4,9 +4,6 @@ Created on 2 Mar 2011
 @author: will
 '''
 
-from __future__ import print_function
-from future.builtins import str, zip
-
 from apel.db.records import SummaryRecord, InvalidRecordException
 from datetime import datetime
 import unittest

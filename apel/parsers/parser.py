@@ -16,7 +16,7 @@
    @author: Konrad Jopek
 '''
 
-from future.builtins import object
+from apel import __version__
 
 import logging
 
@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 class ParserException(Exception):
     pass
 
-class Parser(object):
+class Parser:
     ''' The base class for all parsers '''
 
     UNPROCESSED = '0'
@@ -66,3 +66,9 @@ class Parser(object):
             pass
 
         return False
+
+    def get_client_version(self):
+        '''
+        Method to get APEL client version
+        '''
+        return "APEL/{0}.{1}.{2}".format(*__version__)

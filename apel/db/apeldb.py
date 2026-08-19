@@ -16,8 +16,6 @@
    @author: Konrad Jopek
 '''
 
-from future.builtins import object, str
-
 import logging
 
 from apel.db import LOGGER_ID
@@ -28,7 +26,7 @@ logger = logging.getLogger(LOGGER_ID)
 class ApelDbException(Exception):
     pass
 
-class ApelDb(object):
+class ApelDb:
     '''
     Interface for any database used by the record loader.  Implementations
     should implement the methods.
@@ -71,7 +69,7 @@ class ApelDb(object):
         pass
 
 
-class Query(object):
+class Query:
     '''
     Class for representing queries to DB.
 

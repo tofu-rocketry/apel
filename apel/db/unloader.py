@@ -15,20 +15,13 @@
 
    @author: Konrad Jopek, Will Rogers
 '''
-from future import standard_library
-standard_library.install_aliases()
-from future.builtins import object, str
 
 import datetime
-import os
+import io
 import logging
-try:
-    import cStringIO as StringIO
-except ImportError:
-    try:
-        import StringIO
-    except ImportError:
-        import io as StringIO
+import os
+
+from dirq.QueueSimple import QueueSimple
 
 from apel.db import (Query, ApelDbException, JOB_MSG_HEADER, JOB_MSG_HEADER_04,
                      SUMMARY_MSG_HEADER, SUMMARY_MSG_HEADER_04,
@@ -39,13 +32,12 @@ from apel.db.records import (JobRecord, JobRecord04, SummaryRecord, SummaryRecor
                              NormalisedSummaryRecord, NormalisedSummaryRecord04,
                              SyncRecord, CloudRecord, CloudSummaryRecord, StorageRecord,
                              AcceleratorRecord, AcceleratorSummary)
-from dirq.QueueSimple import QueueSimple
 
 
 log = logging.getLogger(__name__)
 
 
-class DbUnloader(object):
+class DbUnloader:
 
     APEL_HEADERS = {JobRecord: JOB_MSG_HEADER,
                     SummaryRecord: SUMMARY_MSG_HEADER,
@@ -86,7 +78,8 @@ class DbUnloader(object):
     MAY_WITHHOLD_DNS = [JobRecord, SyncRecord, CloudRecord]
 
     def __init__(self, db, qpath, inc_vos=None, exc_vos=None, local=False, withhold_dns=False,
-                 dict_records=False, decimal_cpu_count=False):
+                 dict_records=False, decimal_cpu_count=False,
+                 include_infrastructure_description=False):
         self._db = db
         outpath = os.path.join(qpath, "outgoing")
         self._msgq = QueueSimple(outpath)
@@ -96,7 +89,7 @@ class DbUnloader(object):
         self._withhold_dns = withhold_dns
         self._decimal_cpu_count = decimal_cpu_count
         self.records_per_message = 1000
-        self.include_infrastructure_description = False
+        self.include_infrastructure_description = include_infrastructure_description
         if dict_records:
             # If dict_records is True, then we only handle the subset of v0.4 records
             self.RECORD_TYPES = self.DICT_RECORD_TYPES
@@ -290,7 +283,7 @@ class DbUnloader(object):
 
         This is currently enabled only for CAR.
         '''
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         if type(records[0]) == JobRecord:
             XML_HEADER = '<?xml version="1.0" ?>'
             UR_OPEN = ('<urf:UsageRecords xmlns:urf="http://eu-emi.eu/namespace'
@@ -340,7 +333,7 @@ class DbUnloader(object):
         ) and not self.include_infrastructure_description:
             exclude_fields.add('InfrastructureDescription')
 
-        buf = StringIO.StringIO()
+        buf = io.StringIO()
         buf.write(self.APEL_HEADERS[record_type] + '\n')
         buf.write('%%\n'.join( [ record.get_msg(self._withhold_dns,
                                                 exclude_fields=exclude_fields)

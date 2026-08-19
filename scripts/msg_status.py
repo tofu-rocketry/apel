@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2012 STFC
 #
@@ -20,11 +20,9 @@
     @author: Will Rogers
 '''
 
-from __future__ import print_function
-from future.builtins import input, next
-
-import sys
 import os
+import sys
+
 from dirq.queue import Queue
 from dirq.QueueSimple import QueueSimple
 

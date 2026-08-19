@@ -1,14 +1,25 @@
 #!/bin/bash
 
-# Apel Build Script 1.0: FPM edition
+# APEL Build Script: FPM edition
 # Currently supports RPM ONLY.
-# Download ruby (if you're locked to 2.5, use RVM) and then run:
-# sudo gem install fpm -v 1.14.2
-# for RPM builds, you will also need:
-# sudo yum install rpm-build rpmlint | sudo apt-get install rpm
+
+# Tested with FPM 1.16.0 and Ruby 2.5.9 on EL8, and Ruby 3.0.7 on EL9
+
+# Install Ruby
+# yum install ruby
+# If you want to run an fpm version other than the one below you'll need a later version of Ruby,
+# so if you're locked to 2.5, use RVM, https://www.tecmint.com/install-ruby-on-centos-rhel-8/#installrubyrvm)
+
+# Install fpm
+# gem install fpm -v 1.16.0
+
+# For RPM builds, you will also need:
+# yum install rpm-build rpmlint
+
+# Build package
 # ./apel-build.sh rpm <version> <iteration> <python_root_dir>
 # e.g.
-# ./apel-build.sh rpm 1.9.2 1 /usr/lib/python2.7
+# ./apel-build.sh rpm 2.6.0 1 /usr/lib/python3.6
 # If you're struggling finding the right version of Python to use, consider opening interpreter and:
 # import site; site.getsitepackages()
 
@@ -16,11 +27,11 @@ set -e
 
 usage() {
     echo "Usage: $0 [options] (rpm) <version> <iteration> <python_root_dir> "
-    echo -e "Build script for Apel.\n"
-    echo "  -h                    Displays help."
-    echo "  -v                    Verbose FPM output."
-    echo "  -s <source_dir>       Directory of source files.  Defaults to ~/rpmbuild/SOURCES."
-    echo -e "  -b <build_dir>        Directory of build files.  Defaults to ~/rpmbuild/BUILD.\n" 1>&2;
+    echo -e "Build script for APEL.\n"
+    echo "  -h                Displays help."
+    echo "  -v                Verbose FPM output."
+    echo "  -s <source_dir>   Directory of source files. Defaults to ~/rpmbuild/SOURCES."
+    echo -e "  -b <build_dir>    Directory of build files. Defaults to ~/rpmbuild/BUILD.\n" 1>&2;
     exit 1;
 }
 
@@ -59,7 +70,7 @@ fi
 PACK_TYPE=$1
 VERSION=$2
 ITERATION=$3
-PYTHON_ROOT_DIR=$4 # i.e. /usr/lib/python2.7
+PYTHON_ROOT_DIR=$4  # i.e. /usr/lib/python3.6
 
 if [[ "$PACK_TYPE" = "rpm" ]]; then
     LIB_EXTENSION="/site-packages"
@@ -69,7 +80,7 @@ if [[ "$PACK_TYPE" = "rpm" ]]; then
     if [[ "$BUILD_ASSIGNED" = 0 ]]; then
         BUILD_DIR=~/rpmbuild/BUILD
     fi
-else # If package type is NOT a rpm type, show an error message and exit
+else  # If package type is NOT a rpm type, show an error message and exit
     echo "$0 currently supports 'rpm' package type ONLY."
     usage;
 fi
@@ -162,32 +173,16 @@ cp -r "$SOURCE_DIR/$APEL_DIR/apel/"* "$TEMP_DIR_FOR_LIB/$PYTHON_ROOT_DIR/$LIB_EX
 # In addition we make apel into compiled bytecode to replicate what rpm was doing.
 $PY_VERSION -m compileall "$TEMP_DIR_FOR_LIB/$PYTHON_ROOT_DIR/$LIB_EXTENSION/apel/"
 
-# Set up dependencies for apel-lib based on Python version
-if [[ ${PY_NUM:0:1} == "3" ]]; then
-    echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
-    FPM_PYTHON="--depends python3 \
-        --depends python3-pip \
-        --depends python3-ldap \
-        --depends openldap-devel \
-        --depends python3-dirq \
-        --depends python3-iso8601 \
-        --depends python3-mysqlclient \
-        --depends python3-future \
-        --depends python3-jsonschema "
-    FPM_PYTHON_SERVER_DEPS="--depends python3-daemon"
-elif [[ ${PY_NUM:0:1} == "2" ]]; then
-    echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
-    # This dependencies is for python2 in el7 environment.
-    FPM_PYTHON="--depends python2 \
-        --depends python2-pip \
-        --depends python-ldap \
-        --depends openldap-devel \
-        --depends python-dirq \
-        --depends python-iso8601 \
-        --depends MySQL-python \
-        --depends python2-future "
-    FPM_PYTHON_SERVER_DEPS="--depends python-daemon"
-fi
+# Set up dependencies for apel-lib
+echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
+FPM_PYTHON="--depends python3 \
+    --depends python3-pip \
+    --depends python3-ldap \
+    --depends python3-dirq \
+    --depends python3-iso8601 \
+    --depends python3-mysqlclient \
+    --depends python3-jsonschema "
+FPM_PYTHON_SERVER_DEPS="--depends python3-daemon"
 
 # Build the packages
 SOURCE_TYPE="dir"

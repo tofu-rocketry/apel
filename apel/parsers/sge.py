@@ -141,7 +141,8 @@ class SGEParser(Parser):
                   'CpuDuration'     : lambda x: int(round(float(x[36]))*self._get_cpu_multiplier(x[1])),
                   'StartTime'       : lambda x: int(round(float(x[9])/divisor)),
                   'StopTime'        : lambda x: int(round(float(x[10])/divisor)),
-                  'Infrastructure'  : lambda x: "APEL-CREAM-SGE",
+                  'Infrastructure'  : lambda *args: self.get_client_version() +
+                                                         "-CREAM-SGE",
                   'MachineName'     : lambda x: self.machine_name,
                   'MemoryReal'      : lambda x: int(float(x[37])*1024*1024),  # is this correct?
                   'MemoryVirtual'   : lambda x: int(float(x[42])),
@@ -155,10 +156,12 @@ class SGEParser(Parser):
         for key in mapping:
             data[key] = mapping[key](values)
 
-        assert data['CpuDuration'] >= 0, 'Negative CpuDuration value'
-        assert data['WallDuration'] >= 0, 'Negative WallDuration value'
-        assert data['StopTime'] > 0, 'Zero epoch time for field StopTime'
-
+        if data['CpuDuration'] < 0:
+            raise ValueError("Negative CpuDuration value: %s" % data['CpuDuration'])
+        if data['WallDuration'] < 0:
+            raise ValueError("Negative WallDuration value: %s" % data['WallDuration'])
+        if data['StopTime'] <= 0:
+            raise ValueError("Zero epoch time for field StopTime")
 
         record.set_all(data)
 

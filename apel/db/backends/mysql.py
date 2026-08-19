@@ -18,8 +18,6 @@ Created on 27 Oct 2011
     @author: Will Rogers, Konrad Jopek
 '''
 
-from future.builtins import object, str
-
 from apel.db import ApelDbException
 from apel.db.records import (BlahdRecord,
                              CloudRecord,
@@ -47,7 +45,7 @@ log = logging.getLogger(__name__)
 # treat MySQL warnings as exceptions
 # warnings.simplefilter("error", category=MySQLdb.Warning)
 
-class ApelMysqlDb(object):
+class ApelMysqlDb:
     '''
     MySQL implementation of the general ApelDb interface.
     '''
@@ -208,7 +206,7 @@ class ApelMysqlDb(object):
 
     def get_sync_records(self, query=None, records_per_message=1000):
         """
-        Get sync records from the SuperSummaries table. Filter by the
+        Get sync records from the VSuperSummaries view. Filter by the
         provided query.
         """
         if query is not None:

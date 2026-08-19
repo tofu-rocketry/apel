@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   Copyright (C) 2012 STFC
 #
@@ -25,30 +25,21 @@
    @author: Konrad Jopek, Will Rogers
 '''
 
-from __future__ import print_function
-from future import standard_library
-standard_library.install_aliases()
-from future.builtins import str
-
-import sys
-import os
+import configparser
 import logging.config
-import ldap
+import os
+import sys
 from argparse import ArgumentParser
 
-try:
-    # Renamed ConfigParser to configparser in Python 3
-    import configparser as ConfigParser
-except ImportError:
-    import ConfigParser
+import ldap
+import ssm.agents
 
 from apel import __version__
+from apel.common import set_up_logging
+from apel.common.exceptions import default_handler, install_exc_handler
 from apel.db import ApelDb, ApelDbException
 from apel.db.unloader import DbUnloader
 from apel.ldap import fetch_specint
-from apel.common import set_up_logging
-from apel.common.exceptions import install_exc_handler, default_handler
-import ssm.agents
 
 
 DB_BACKEND = 'mysql'
@@ -64,7 +55,7 @@ class ClientConfigException(Exception):
 
 
 def run_ssm(scp):
-    """Run the SSM according to the values in the ConfigParser object."""
+    """Run the SSM according to the values in the configparser object."""
     log = logging.getLogger(LOGGER_ID)
 
     protocol = ssm.agents.get_protocol(scp, log)
@@ -75,7 +66,7 @@ def run_ssm(scp):
 
 def run_client(ccp):
     '''
-    Run the client according to the configuration in the ConfigParser
+    Run the client according to the configuration in the configparser
     object.
     '''
     log = logging.getLogger(LOGGER_ID)
@@ -117,16 +108,16 @@ def run_client(ccp):
             try:
                 include = ccp.get('unloader', 'include_vos')
                 include_vos = [vo.strip() for vo in include.split(',')]
-            except ConfigParser.NoOptionError:
+            except configparser.NoOptionError:
                 # Only exclude VOs if we haven't specified the ones to include.
                 include_vos = None
                 try:
                     exclude = ccp.get('unloader', 'exclude_vos')
                     exclude_vos = [vo.strip() for vo in exclude.split(',')]
-                except ConfigParser.NoOptionError:
+                except configparser.NoOptionError:
                     exclude_vos = None
 
-    except (ClientConfigException, ConfigParser.Error) as err:
+    except (ClientConfigException, configparser.Error) as err:
         log.error('Error in configuration file: %s', err)
         sys.exit(1)
 
@@ -146,7 +137,7 @@ def run_client(ccp):
         db.test_connection()
         log.info('Connected.')
 
-    except (ConfigParser.Error, ApelDbException) as err:
+    except (configparser.Error, ApelDbException) as err:
         log.error('Error during connecting to database: %s', err)
         log.info(LOG_BREAK)
         sys.exit(1)
@@ -158,7 +149,7 @@ def run_client(ccp):
         key = 'manual_spec' + str(index)
         try:
             spec = ccp.get('spec_updater', key)
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             break
         specs.append(spec)
         index += 1
@@ -166,7 +157,7 @@ def run_client(ccp):
     if len(specs) > 0:
         try:
             s = ccp.get('spec_updater', 'site_name')
-        except ConfigParser.NoOptionError:
+        except configparser.NoOptionError:
             log.error('Site name must be configured '
                       'for manual_spec definitions.')
             sys.exit(1)
@@ -236,9 +227,12 @@ def run_client(ccp):
         interval = ccp.get('unloader', 'interval')
         withhold_dns = ccp.getboolean('unloader', 'withhold_dns')
         dict_records = ccp.getboolean('unloader', 'dict_benchmark_type')
+        include_infrastructure_description = ccp.getboolean('unloader',
+                                            'include_infrastructure_description')
 
         unloader = DbUnloader(db, unload_dir, include_vos, exclude_vos,
-                              local_jobs, withhold_dns, dict_records)
+                              local_jobs, withhold_dns, dict_records,
+                              include_infrastructure_description=include_infrastructure_description)
         try:
             if interval == 'latest':
                 msgs, recs = unloader.unload_latest(table_name, send_ur)
@@ -308,10 +302,10 @@ def main():
     if os.path.exists('/etc/apel/logging.cfg') or options.log_config is not None:
         logging.warning('Separate logging config file option has been deprecated.')
 
-    ccp = ConfigParser.ConfigParser()
+    ccp = configparser.ConfigParser()
     ccp.read(options.config)
 
-    scp = ConfigParser.ConfigParser()
+    scp = configparser.ConfigParser()
     scp.read(options.ssm_config)
 
     # set up logging
@@ -319,7 +313,7 @@ def main():
         set_up_logging(ccp.get('logging', 'logfile'), ccp.get('logging', 'level'),
                        ccp.getboolean('logging', 'console'))
         log = logging.getLogger(LOGGER_ID)
-    except (ConfigParser.Error, ValueError, IOError) as err:
+    except (configparser.Error, ValueError, IOError) as err:
         print('Error configuring logging: %s' % str(err))
         print('The system will exit.')
         sys.exit(1)

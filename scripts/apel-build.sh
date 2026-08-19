@@ -1,14 +1,25 @@
 #!/bin/bash
 
-# Apel Build Script 1.0: FPM edition
+# APEL Build Script: FPM edition
 # Currently supports RPM ONLY.
-# Download ruby (if you're locked to 2.5, use RVM) and then run:
-# sudo gem install fpm -v 1.14.2
-# for RPM builds, you will also need:
-# sudo yum install rpm-build rpmlint | sudo apt-get install rpm
+
+# Tested with FPM 1.16.0 and Ruby 2.5.9 on EL8, and Ruby 3.0.7 on EL9
+
+# Install Ruby
+# yum install ruby
+# If you want to run an fpm version other than the one below you'll need a later version of Ruby,
+# so if you're locked to 2.5, use RVM, https://www.tecmint.com/install-ruby-on-centos-rhel-8/#installrubyrvm)
+
+# Install fpm
+# gem install fpm -v 1.16.0
+
+# For RPM builds, you will also need:
+# yum install rpm-build rpmlint
+
+# Build package
 # ./apel-build.sh rpm <version> <iteration> <python_root_dir>
 # e.g.
-# ./apel-build.sh rpm 1.9.2 1 /usr/lib/python2.7
+# ./apel-build.sh rpm 2.6.0 1 /usr/lib/python3.6
 # If you're struggling finding the right version of Python to use, consider opening interpreter and:
 # import site; site.getsitepackages()
 
@@ -16,11 +27,11 @@ set -e
 
 usage() {
     echo "Usage: $0 [options] (rpm) <version> <iteration> <python_root_dir> "
-    echo -e "Build script for Apel.\n"
-    echo "  -h                    Displays help."
-    echo "  -v                    Verbose FPM output."
-    echo "  -s <source_dir>       Directory of source files.  Defaults to ~/rpmbuild/SOURCES."
-    echo -e "  -b <build_dir>        Directory of build files.  Defaults to ~/rpmbuild/BUILD.\n" 1>&2;
+    echo -e "Build script for APEL.\n"
+    echo "  -h                Displays help."
+    echo "  -v                Verbose FPM output."
+    echo "  -s <source_dir>   Directory of source files. Defaults to ~/rpmbuild/SOURCES."
+    echo -e "  -b <build_dir>    Directory of build files. Defaults to ~/rpmbuild/BUILD.\n" 1>&2;
     exit 1;
 }
 
@@ -59,7 +70,7 @@ fi
 PACK_TYPE=$1
 VERSION=$2
 ITERATION=$3
-PYTHON_ROOT_DIR=$4 # i.e. /usr/lib/python2.7
+PYTHON_ROOT_DIR=$4  # i.e. /usr/lib/python3.6
 
 if [[ "$PACK_TYPE" = "rpm" ]]; then
     LIB_EXTENSION="/site-packages"
@@ -69,7 +80,7 @@ if [[ "$PACK_TYPE" = "rpm" ]]; then
     if [[ "$BUILD_ASSIGNED" = 0 ]]; then
         BUILD_DIR=~/rpmbuild/BUILD
     fi
-else # If package type is NOT a rpm type, show an error message and exit
+else  # If package type is NOT a rpm type, show an error message and exit
     echo "$0 currently supports 'rpm' package type ONLY."
     usage;
 fi
@@ -167,7 +178,6 @@ echo "Building $VERSION iteration $ITERATION for Python $PY_NUM as $PACK_TYPE."
 FPM_PYTHON="--depends python3 \
     --depends python3-pip \
     --depends python3-ldap \
-    --depends openldap-devel \
     --depends python3-dirq \
     --depends python3-iso8601 \
     --depends python3-mysqlclient \

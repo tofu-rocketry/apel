@@ -55,10 +55,10 @@ class LoaderTest(unittest.TestCase):
 
         in_q = dirq.queue.Queue(os.path.join(self.dir_path, 'incoming'),
                                 schema=schema)
-        in_q.add({"body": "bad message", "signer": "test signer", "empaid": "1",
+        in_q.add({"body": "bad message", "signer": "test signer", "empaid": "",
                   "error": ""})
         in_q.add({"body": "APEL-summary-job-message: v0.3",
-                  "signer": "test signer", "empaid": "2", "error": ""})
+                  "signer": "test signer", "empaid": "", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -102,7 +102,7 @@ class LoaderTest(unittest.TestCase):
                     CpuDuration: 2345
                     NumberOfJobs: 100
                     %%""",
-                  "signer": "test signer", "empaid": "1", "error": ""})
+                  "signer": "test signer", "empaid": "", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -134,7 +134,7 @@ class LoaderTest(unittest.TestCase):
                     CpuDuration: 2345
                     NumberOfJobs: 100
                     %%""",
-                  "signer": "test signer", "empaid": "2", "error": ""})
+                  "signer": "test signer", "empaid": "", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
@@ -174,7 +174,7 @@ class LoaderTest(unittest.TestCase):
         </sr:StorageUsageRecords> """
 
         in_q.add({"body": body,
-                  "signer": "test signer", "empaid": "1", "error": ""})
+                  "signer": "test signer", "empaid": "", "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',

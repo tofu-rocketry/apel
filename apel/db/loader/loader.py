@@ -148,8 +148,7 @@ class Loader:
 
                 if (not data or
                         not data['body'].strip() or
-                        not data['signer'].strip() or
-                        not data['empaid'].strip()):
+                        not data['signer'].strip()):
                     raise LoaderException(
                         "Cannot load incomplete message from an incoming queue"
                     )

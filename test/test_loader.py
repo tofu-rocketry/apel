@@ -246,8 +246,8 @@ class LoaderTest(unittest.TestCase):
             mock_log.assert_has_calls(
                         [call('Message contains %i %s records', 2, 'Accelerator')])
 
-    def test_load_all_msgs(self):
-        """Check that load_records is called with an empty list."""
+    def test_loading_empty_messages(self):
+        """Check that empty messages get rejected without crashing."""
         pidfile = os.path.join(self.dir_path, 'pidfile')
 
         valid_body = """APEL-summary-job-message: v0.2
@@ -268,18 +268,24 @@ class LoaderTest(unittest.TestCase):
         re_q = dirq.queue.Queue(os.path.join(self.dir_path, 'reject'),
                                 schema=schema)
 
-        in_q.add({"body": "    ", "signer": "   ", "empaid": "3",
+        # Bad messages with empty elements or incorrect body
+        in_q.add({"body": "    ", "signer": "Someone", "empaid": "3",
                   "error": ""})
-        in_q.add({"body": valid_body, "signer": "Test signer", "empaid": "4",
+        in_q.add({"body": valid_body, "signer": "   ", "empaid": "4",
                   "error": ""})
-        in_q.add({"body": "Still it is a Bad Message", "signer": "Test signer", "empaid": "5",
+        in_q.add({"body": "", "signer": "", "empaid": "5",
+                  "error": ""})
+        in_q.add({"body": "A Bad Message", "signer": "Test signer", "empaid": "6",
+                  "error": ""})
+        # Good messages
+        in_q.add({"body": valid_body, "signer": "Test signer", "empaid": "7",
                   "error": ""})
 
         self.loader = apel.db.loader.Loader(self.dir_path, True, 'mysql',
                                             'host', 1234, 'db', 'user', 'pwd',
                                             pidfile)
         self.loader.load_all_msgs()
-        self.assertEqual(re_q.count(), 2)
+        self.assertEqual(re_q.count(), 4)
 
     def tearDown(self):
         shutil.rmtree(self.dir_path)

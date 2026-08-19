@@ -149,9 +149,7 @@ class Loader:
                 if (not data or
                         not data['body'].strip() or
                         not data['signer'].strip()):
-                    raise LoaderException(
-                        "Cannot load incomplete message from an incoming queue"
-                    )
+                    raise LoaderException("Empty message or message element")
 
                 self.load_msg(msg_text, signer)
 

@@ -201,7 +201,17 @@ exit 0
 # ==============================================================================
 
 %changelog
-  * Wed Jul 15 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.6.0-1
+ * Wed Aug 19 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 3.0.0-1
+ - [client] Added infrastructure description field to summaries. This will require a
+   database schema update - see update script.
+ - Fixed documentation in build script to help avoid EL8 builds with path conflicts.
+ - Refactored to remove Python 2 compatibility code and modernise codebase.
+ - [server] Added filter to avoid reading non-DN strings from ACL files.
+ - [server] Fixed crash when trying to load an empty message.
+ - [server] Removed deprecated SuperSummaries table.
+ - [server] Fixed issues in accelerator (GPU) accounting schema.
+
+ * Wed Jul 15 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.6.0-1
  - [server] Added support for accelerator (GPU) accounting records to cloud accounting.
 
  * Wed Jul 01 2026 Adrian Coveney <adrian.coveney@stfc.ac.uk> - 2.5.1-1

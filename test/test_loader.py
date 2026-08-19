@@ -246,7 +246,6 @@ class LoaderTest(unittest.TestCase):
             mock_log.assert_has_calls(
                         [call('Message contains %i %s records', 2, 'Accelerator')])
 
-
     def test_load_all_msgs(self):
         """Check that load_records is called with an empty list."""
         pidfile = os.path.join(self.dir_path, 'pidfile')
@@ -263,7 +262,7 @@ class LoaderTest(unittest.TestCase):
                     CpuDuration: 2345
                     NumberOfJobs: 100
                     %%"""
-        
+
         in_q = dirq.queue.Queue(os.path.join(self.dir_path, 'incoming'),
                                 schema=schema)
         re_q = dirq.queue.Queue(os.path.join(self.dir_path, 'reject'),
@@ -280,7 +279,7 @@ class LoaderTest(unittest.TestCase):
                                             'host', 1234, 'db', 'user', 'pwd',
                                             pidfile)
         self.loader.load_all_msgs()
-        self.assertEquals(re_q.count(), 2)
+        self.assertEqual(re_q.count(), 2)
 
     def tearDown(self):
         shutil.rmtree(self.dir_path)
